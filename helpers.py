@@ -13,10 +13,16 @@ def calculateAngle(pos1, pos2):
     return math.atan2(deltaY, deltaX)
 
 # Calculates bird position *in slingshot*
-def calculateBirdPosition(game, slingshot, mousePos):
-    birdPos = mousePos
-    if calculateDistance(slingshot.pos, birdPos) > game.maxStretch:
-        theta = calculateAngle(slingshot.pos, birdPos)
-        birdPos = [game.maxStretch * math.cos(theta) + slingshot.pos[0], 
-                   game.maxStretch * math.sin(theta) + slingshot.pos[1]]
-    return birdPos
+def calculateBirdPosition(slingshot, bird, game, dt):
+    if bird.inSlingshot:
+        stretch = calculateDistance(slingshot.pos, bird.pos)
+        if calculateDistance(slingshot.pos, bird.pos) > slingshot.maxStretch:
+            theta = calculateAngle(slingshot.pos, bird.pos)
+            bird.pos = [slingshot.maxStretch * math.cos(theta) + slingshot.pos[0], 
+                    slingshot.maxStretch * math.sin(theta) + slingshot.pos[1]]
+            stretch = slingshot.maxStretch
+        return stretch
+    else:
+        print(dt)
+        bird.pos = [bird.pos[0] + (bird.velocity[0] * dt) / game.pixelsPerMeter, 
+                    bird.pos[1] - (bird.velocity[1] * dt) / game.pixelsPerMeter,]
