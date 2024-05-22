@@ -23,6 +23,5 @@ def calculateBirdPosition(slingshot, bird, game, dt):
             stretch = slingshot.maxStretch
         return stretch
     else:
-        print(dt)
         bird.pos = [bird.pos[0] + (bird.velocity[0] * dt) / game.pixelsPerMeter, 
                     bird.pos[1] - (bird.velocity[1] * dt) / game.pixelsPerMeter,]
