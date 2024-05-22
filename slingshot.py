@@ -2,7 +2,7 @@ class Slingshot:
     def __init__(self, pos):
         self.pos = pos
         self.maxStretch = 50
-        self.springConstant = 2
+        self.springConstant = 10
         self.stretch = 0
 
     def springPotentialEnergy(self):

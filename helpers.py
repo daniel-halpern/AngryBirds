@@ -25,3 +25,8 @@ def calculateBirdPosition(slingshot, bird, game, dt):
     else:
         bird.pos = [bird.pos[0] + (bird.velocity[0] * dt) / game.pixelsPerMeter, 
                     bird.pos[1] - (bird.velocity[1] * dt) / game.pixelsPerMeter,]
+        if bird.pos[1] > game.size[1]:
+            bird.pos[1] = game.size[1]
+            bird.velocity[1] = -bird.velocity[1] * game.energyLostMultiplier
+            bird.velocity[0] = bird.velocity[0] * game.energyLostMultiplier
+
