@@ -5,3 +5,7 @@ __pycache__/helpers.cpython-311.pyc
 __pycache__/game.cpython-311.pyc
 __pycache__/bird.cpython-311.pyc
 .DS_Store
+__pycache__/setup.cpython-311.pyc
+__pycache__/events.cpython-311.pyc
+__pycache__/draw.cpython-311.pyc
+__pycache__/block.cpython-311.pyc
