@@ -13,6 +13,7 @@ def main():
     screen, clock, running, slingshot, bird, game = initialize_game()
     while running:
         game.dt = clock.tick(60)
+
         # Events
         event_result = handle_events()
         if event_result == False:
@@ -21,9 +22,9 @@ def main():
             slingshot, bird, game = reset_game()
 
         handle_mouse_events(bird, slingshot, game)
-        print(check_collisions(bird, game))
+        check_collisions(bird, game)
 
-        # Drawing
+        # Draws everything
         draw(screen, bird, slingshot, game)
     pygame.quit() 
 

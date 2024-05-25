@@ -25,21 +25,36 @@ def calculate_bird_position(slingshot, bird, game):
     else:
         bird.pos = [bird.pos[0] + (bird.velocity[0] * game.dt) / game.pixels_per_meter, 
                     bird.pos[1] - (bird.velocity[1] * game.dt) / game.pixels_per_meter,]
-        if bird.pos[1] > game.size[1]:
-            bird.pos[1] = game.size[1]
+        # If the bird hits the floor, bounce
+        if bird.pos[1] + bird.size > game.size[1]:
+            bird.pos[1] = game.size[1] - bird.size
             bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
             bird.velocity[0] = bird.velocity[0] * game.energy_lost_multiplier
 
 def check_collisions(bird, game):
     for block in game.block_list:
-        if block.type == "line":
-            if bird.pos[0] >= block.pos[0][0] and bird.pos[0] <= block.pos[1][0]:
-                if bird.pos[1] >= block.pos[0][1] - bird.size and bird.pos[1] <= block.pos[0][1]:
-                    return True
-        elif block.type == "box":
-            width = block.pos[1][0] - block.pos[0][0]
-            height = block.pos[1][1] - block.pos[0][1]
-            if bird.pos[0] >= block.pos[0][0] and bird.pos[0] <= block.pos[0][0] + width:
-                if bird.pos[1] >= block.pos[1][0] - bird.size and bird.pos[1] <= block.pos[1][0] + height:
-                    return True
+        if block.type == "box":
+            birdx, birdy = bird.pos[0], bird.pos[1]
+            blockx1, blocky1 = block.pos[0][0], block.pos[0][1]
+            blockx2, blocky2 = block.pos[1][0], block.pos[1][1]
+            if birdx + bird.size >= blockx1 and birdx - bird.size <= blockx2:
+                if birdy + bird.size >= blocky1 and birdy - bird.size <= blocky2:
+                    closest_x = max(blockx1, min(birdx, blockx1 + block.width))
+                    closest_y = max(blocky1, min(birdy, blocky1 + block.height))
+                    dist_from_closest_x = abs(birdx - closest_x)
+                    dist_from_closest_y = abs(birdy - closest_y)
+                    if dist_from_closest_x >= dist_from_closest_y:
+                        if bird.velocity[0] > 0:
+                            bird.pos[0] = closest_x - bird.size
+                        else: 
+                            bird.pos[0] = closest_x + bird.size
+                        bird.velocity = [-bird.velocity[0] * game.energy_lost_multiplier, bird.velocity[1]]
+                    else:
+                        if bird.velocity[1] > 0:
+                            bird.pos[1] = closest_y + bird.size
+                        else: 
+                            bird.pos[1] = closest_y - bird.size
+                        bird.velocity = [bird.velocity[0], -bird.velocity[1] * game.energy_lost_multiplier]
+                        print(closest_x, closest_y)
+                        return True
     return False

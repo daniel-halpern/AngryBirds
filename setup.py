@@ -14,9 +14,9 @@ def initialize_game():
     slingshot = Slingshot([200,600])
     bird = Bird(slingshot.pos, 10)
     game = Game(game_size)
-    game.block_list = [Block([(50,50), (100,100)], "box", False), 
+    game.block_list = [Block([(500,500), (700,700)], "box", False), 
+                       Block([(0,500), (50,700)], "box", False), 
                        Block([(100,100), (200, 200)], "box", False)]
-
     return screen, clock, running, slingshot, bird, game
 
 def reset_game():
@@ -24,6 +24,7 @@ def reset_game():
     slingshot = Slingshot([200,600])
     bird = Bird(slingshot.pos, 10)
     game = Game(game_size)
-    game.block_list = [Block([(50,50), (100,100)], "box", False), 
+    game.block_list = [Block([(500,500), (700,700)], "box", False), 
+                       Block([(0,500), (50,700)], "box", False),
                        Block([(100,100), (200, 200)], "box", False)]
     return slingshot, bird, game
