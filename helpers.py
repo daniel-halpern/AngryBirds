@@ -36,7 +36,7 @@ def calculate_bird_position(slingshot, bird, game):
 # Ran each frame to check if the bird is colliding with an object. 
 # If it is, it calculates the required change in velocity
 def check_collisions(bird, game):
-    for block in game.block_list:
+    for block in game.level_list[game.level].block_list:
         if block.type == "box":
             birdx, birdy = bird.pos[0], bird.pos[1]
             blockx1, blocky1 = block.pos[0][0], block.pos[0][1]
