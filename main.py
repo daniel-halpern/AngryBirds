@@ -23,6 +23,7 @@ def main():
 
         handle_mouse_events(bird, slingshot, game)
         check_collisions(bird, game)
+        check_collisions2(bird, game)
 
         # Draws everything
         draw(screen, bird, slingshot, game)

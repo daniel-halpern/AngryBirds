@@ -1,4 +1,5 @@
 import math
+import pygame
 
 class Bird:
     def __init__(self, pos, mass):
@@ -11,6 +12,7 @@ class Bird:
         self.Fnety = 0
         self.accx = 0
         self.accy = -.2
+        self.bird = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
 
     def calculate_velocity(self, energy, theta):
         velocity = math.sqrt(2 * energy)
