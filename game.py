@@ -1,15 +1,17 @@
 from block import *
 
 class Game():
-    def __init__(self, game_size):
+    def __init__(self, game_size, level):
         self.pixels_per_meter = 100
         self.size = game_size
         self.energy_lost_multiplier = .5
         self.dt = 0
         self.block_list = []
         self.block_list2 = []
-        self.level = 1
+        self.level = level
         self.level_list = [Level("start"), Level("basketball")]
+        self.level_change_timer = 0
+        self.level_change_delay = 500
 
 
 class Level():

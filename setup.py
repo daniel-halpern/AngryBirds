@@ -13,12 +13,12 @@ def initialize_game():
 
     slingshot = Slingshot([200,600])
     bird = Bird(slingshot.pos, 10)
-    game = Game(game_size)
+    game = Game(game_size, 0)
     return screen, clock, running, slingshot, bird, game
 
-def reset_game():
+def reset_game(level):
     game_size = [1400, 800]
     slingshot = Slingshot([200,600])
     bird = Bird(slingshot.pos, 10)
-    game = Game(game_size)
+    game = Game(game_size, level)
     return slingshot, bird, game

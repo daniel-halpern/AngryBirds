@@ -15,11 +15,11 @@ def main():
         game.dt = clock.tick(60)
 
         # Events
-        event_result = handle_events()
+        event_result = handle_events(game)
         if event_result == False:
             running = False
         elif event_result == 'reset':
-            slingshot, bird, game = reset_game()
+            slingshot, bird, game = reset_game(game.level)
 
         handle_mouse_events(bird, slingshot, game)
         check_collisions(bird, game)

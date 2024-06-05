@@ -1,7 +1,8 @@
 import pygame
 from helpers import *
 
-def handle_events():
+def handle_events(game):
+    current_time = pygame.time.get_ticks()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -9,6 +10,12 @@ def handle_events():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_r]:
         return 'reset'
+    if keys[pygame.K_LEFT] and current_time - game.level_change_timer > game.level_change_delay:
+        game.level = (game.level -1) % len(game.level_list)
+        game.level_change_timer = current_time
+    if keys[pygame.K_RIGHT] and current_time - game.level_change_timer > game.level_change_delay:
+        game.level = (game.level + 1) % len(game.level_list)
+        game.level_change_timer = current_time
 
     return True
 
