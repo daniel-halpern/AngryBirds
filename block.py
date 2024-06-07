@@ -1,14 +1,6 @@
 from helpers import *
-class Block: 
-    def __init__(self, pos, angle, type, movable):
-        self.pos = pos # Position of center of mass
-        self.angle = 0
-        self.type = type
-        self.movable = movable
-        self.width = pos[1][0] - pos[0][0]
-        self.height = pos[1][1] - pos[0][1]
 
-class Block2: 
+class Block: 
     def __init__(self, point_list, angle, type, movable):
         self.point_list = point_list
         self.angle = angle
@@ -39,11 +31,3 @@ class Block2:
             rotated_points.append(point)
             self.point_list = rotated_points
         return rotated_points
-
-class Block3: 
-    def __init__(self, point_list, angle, type, movable):
-        self.point_list = point_list
-        self.angle = angle
-        self.type = type
-        self.movable = movable
-
