@@ -67,7 +67,8 @@ def check_collisions(bird, game):
 
                 # Reflect the bird's velocity on the normal
                 bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal * game.energy_lost_multiplier)
-                bird.velocity[0], bird.velocity[1] = -bird.velocity[0], -bird.velocity[1]
+                bird.velocity[0] = -bird.velocity[0] * game.energy_lost_multiplier
+                bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
                 return True
 
     # No collision detected

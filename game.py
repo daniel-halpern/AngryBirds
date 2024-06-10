@@ -20,9 +20,15 @@ class Level():
             self.block_list = [Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
                                 Block([(600,600), (600, 600), (700, 200), (700, 200)], 45, "box", False)]
         elif name == "basketball":
-            self.block_list = [Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
-                                Block([(600,600), (700, 600), (700, 700), (600, 700)], 45, "box", False)]
-
+            #self.block_list = [Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
+            #                    Block([(600,600), (700, 600), (700, 700), (600, 700)], 45, "box", False)]
+            self.block_list = [
+                # Backboard
+                Block([(1000, 200), (1000, 635), (1100, 635), (1100, 200)], 0, "box", False),
+                # Hoop
+                Block([(870, 300), (870, 400), (880, 400), (880, 300)], 160, "box", False),
+                Block([(985, 300), (985, 400), (975, 400), (975, 300)], 20, "box", False)
+    ]
 class Player:
     def __init__():
         return
