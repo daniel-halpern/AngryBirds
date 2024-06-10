@@ -59,8 +59,23 @@ def check_collisions(bird, game):
             # If the bird is colliding with the polygon, adjust its position and velocity
             if closest_distance <= bird.size:
                 # Calculate the normal of the surface the bird is colliding with
+                #normal = (np.array(bird.pos) - closest_point)
+                #print("b", normal)
+                #normal = normal / np.linalg.norm(normal)
+                #print("a", normal)
+
+                # Calculate the normal of the surface the bird is colliding with
                 normal = (np.array(bird.pos) - closest_point)
-                normal = normal / np.linalg.norm(normal)
+                normal = normal / np.linalg.norm(normal) if np.linalg.norm(normal) != 0 else normal
+                
+                velocity = [0,0]
+                if normal[0] == 0 and normal[1] == 0:
+                    print("Something went terribly wrong...")
+                    velocity = [-bird.velocity[0], -bird.velocity[1]]
+                elif normal[0] == 0:
+                    velocity = [bird.velocity[0], -bird.velocity[1]]
+                elif normal[1] == 0:
+                    velocity = [-bird.velocity[0], bird.velocity[1]]
 
                 # Move the bird out of the polygon along the normal
                 bird.pos = list(closest_point + normal * (bird.size))
@@ -69,6 +84,9 @@ def check_collisions(bird, game):
                 bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal * game.energy_lost_multiplier)
                 bird.velocity[0] = -bird.velocity[0] * game.energy_lost_multiplier
                 bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
+                if velocity != [0,0]:
+                    bird.velocity[0] = velocity[0] * game.energy_lost_multiplier
+                    bird.velocity[1] = velocity[1] * game.energy_lost_multiplier
                 return True
 
     # No collision detected
