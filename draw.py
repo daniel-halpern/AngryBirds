@@ -20,6 +20,13 @@ def draw(screen, bird, slingshot, game):
     newPos = (slingshot.pos[0] - 25, slingshot.pos[1] - 50)
     screen.blit(slingshot_image, newPos) 
 
+    draw_blocks(screen, game)
+    # If the level is "start", draw the target
+    if game.level == 0:
+        target_pos = (1000, 275)
+        target_image = pygame.image.load('assets/target.png')
+        screen.blit(target_image, target_pos)
+        
     # Draw the bird
     bird_image = pygame.image.load('assets/Red.png')
     bird_size = (50, 50)  # Replace with the desired size
@@ -27,7 +34,7 @@ def draw(screen, bird, slingshot, game):
     bird_image_pos = (bird.pos[0] - bird_image.get_width() // 2, bird.pos[1] - bird_image.get_height() // 2)
     screen.blit(bird_image, bird_image_pos)
     #pygame.draw.circle(screen, "red", bird.pos, 25)
-    draw_blocks(screen, game)
+
     pygame.display.flip()
 
 def draw_blocks(screen, game):

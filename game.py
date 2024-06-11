@@ -17,11 +17,11 @@ class Game():
 class Level():
     def __init__(self, name):
         if name == "start":
-            self.block_list = [Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
-                                Block([(600,600), (600, 600), (700, 200), (700, 200)], 45, "box", False)]
+            self.block_list = []
+            #self.block_list = [
+            #    Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
+            #    ]
         elif name == "basketball":
-            #self.block_list = [Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
-            #                    Block([(600,600), (700, 600), (700, 700), (600, 700)], 45, "box", False)]
             self.block_list = [
                 # Backboard
                 Block([(1000, 200), (1000, 635), (1025, 635), (1025, 200)], 0, "box", False),

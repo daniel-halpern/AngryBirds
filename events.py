@@ -13,6 +13,8 @@ def handle_events(game):
     if keys[pygame.K_LEFT] and current_time - game.level_change_timer > game.level_change_delay:
         game.level = (game.level -1) % len(game.level_list)
         game.level_change_timer = current_time
+        # May want to add something to reset the bird here.
+        # Would have returned 'reset', however, that would lead to no cooldown
     if keys[pygame.K_RIGHT] and current_time - game.level_change_timer > game.level_change_delay:
         game.level = (game.level + 1) % len(game.level_list)
         game.level_change_timer = current_time
