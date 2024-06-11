@@ -9,18 +9,17 @@ class Game():
         self.dt = 0
         self.block_list = []
         self.level = level
-        self.level_list = [Level("start"), Level("basketball")]
+        self.level_list = [Level("target"), Level("basketball")]
         self.level_change_timer = 0
         self.level_change_delay = 500
 
 
 class Level():
     def __init__(self, name):
-        if name == "start":
+        self.name = name
+        if name == "target":
             self.block_list = []
-            #self.block_list = [
-            #    Block([(100,100), (200, 100), (200, 200), (100, 200)], 45, "box", False),
-            #    ]
+            self.target_pos = (0,0)
         elif name == "basketball":
             self.block_list = [
                 # Backboard

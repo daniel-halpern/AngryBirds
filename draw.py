@@ -2,7 +2,6 @@ import pygame
 
 def draw(screen, bird, slingshot, game):
     # Draw the background
-    #screen.fill("aqua")
     bg_image = pygame.image.load('assets/angryBirdsBackground.jpg')
     bg_image = pygame.transform.scale(bg_image, game.size)
     screen.blit(bg_image, (0,0))
@@ -15,18 +14,17 @@ def draw(screen, bird, slingshot, game):
         pygame.draw.line(screen, "brown4", band2_pos, bird.pos, width = 20)
 
     # Draw the slingshot
-    #pygame.draw.circle(screen, "blue", slingshot.pos, 50) # The slingshot
     slingshot_image = pygame.image.load('assets/Slingshot_Classic.png')
     newPos = (slingshot.pos[0] - 25, slingshot.pos[1] - 50)
     screen.blit(slingshot_image, newPos) 
 
     draw_blocks(screen, game)
-    # If the level is "start", draw the target
-    if game.level == 0:
+    # If the level is "target", draw the target
+    if game.level_list[game.level].name == "target":
         target_pos = (1000, 275)
         target_image = pygame.image.load('assets/target.png')
         screen.blit(target_image, target_pos)
-        
+
     # Draw the bird
     bird_image = pygame.image.load('assets/Red.png')
     bird_size = (50, 50)  # Replace with the desired size

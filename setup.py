@@ -20,5 +20,5 @@ def reset_game(level):
     game_size = [1400, 800]
     slingshot = Slingshot([200,500])
     bird = Bird(slingshot.pos, 20)
-    game = Game(game_size, level)
-    return slingshot, bird, game
+    #game = Game(game_size, level)
+    return slingshot, bird#, game

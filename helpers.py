@@ -33,16 +33,14 @@ def calculate_bird_position(slingshot, bird, game):
             bird.pos[1] = game.floor - bird.size
             bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
             bird.velocity[0] = bird.velocity[0] * game.energy_lost_multiplier
-        # if the bird hits the target
-        elif game.level == 0 and bird.pos[1] > 345 and bird.pos[1] < 575 and bird.pos[0] > 1150 and bird.pos[0] < 1200:
-            print("hit target")
+        # If the bird hits the target
+        elif (game.level_list[game.level].name == "target" and 
+              bird.pos[1] > 345 and bird.pos[1] < 575 and 
+              bird.pos[0] > 1150 and bird.pos[0] < 1200):
             bird.velocity = [0,0]
-            #bird.pos[0] = 1150
             bird.accy = 0
 
-
 def check_collisions(bird, game):
-    #for block in game.level_list[game.level].block_list2:
     polygons = game.level_list[game.level].block_list
     for polygon in polygons:
         # Calculate the closest point on the polygon to the bird
@@ -66,22 +64,18 @@ def check_collisions(bird, game):
             # If the bird is colliding with the polygon, adjust its position and velocity
             if closest_distance <= bird.size:
                 # Calculate the normal of the surface the bird is colliding with
-                #normal = (np.array(bird.pos) - closest_point)
-                #print("b", normal)
-                #normal = normal / np.linalg.norm(normal)
-                #print("a", normal)
-
-                # Calculate the normal of the surface the bird is colliding with
                 normal = (np.array(bird.pos) - closest_point)
                 normal = normal / np.linalg.norm(normal) if np.linalg.norm(normal) != 0 else normal
                 
+                # Here to fix the edge case if the bird hits a completely vertical
+                # or horizontal line that makes the normal = 0
                 velocity = [0,0]
                 if normal[0] == 0 and normal[1] == 0:
                     print("Something went terribly wrong...")
                     velocity = [-bird.velocity[0], -bird.velocity[1]]
-                elif normal[0] == 0:
+                elif normal[0] == 0: # Collides with top / bottom
                     velocity = [bird.velocity[0], -bird.velocity[1]]
-                elif normal[1] == 0:
+                elif normal[1] == 0: # Collides with left / right
                     velocity = [-bird.velocity[0], bird.velocity[1]]
 
                 # Move the bird out of the polygon along the normal
@@ -91,6 +85,7 @@ def check_collisions(bird, game):
                 bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal * game.energy_lost_multiplier)
                 bird.velocity[0] = -bird.velocity[0] * game.energy_lost_multiplier
                 bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
+
                 if velocity != [0,0]:
                     bird.velocity[0] = velocity[0] * game.energy_lost_multiplier
                     bird.velocity[1] = velocity[1] * game.energy_lost_multiplier
