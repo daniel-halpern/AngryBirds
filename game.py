@@ -19,15 +19,33 @@ class Level():
         self.name = name
         if name == "target":
             self.block_list = []
-            self.target_pos = (0,0)
+            self.target_pos = (1000, 275)
+
         elif name == "basketball":
+            self.hoop_pos = (1000, 200)
+            xpos = self.hoop_pos[0]
+            ypos = self.hoop_pos[1]
             self.block_list = [
                 # Backboard
-                Block([(1000, 200), (1000, 635), (1025, 635), (1025, 200)], 0, "box", False),
+                Block([self.hoop_pos, (xpos, ypos + 435), (xpos + 25, ypos + 435),
+                    (xpos + 25, ypos)], 0, "box", False),
                 # Hoop
-                Block([(870, 300), (870, 400), (880, 400), (880, 300)], 160, "box", False),
-                Block([(985, 300), (985, 400), (975, 400), (975, 300)], 20, "box", False)
+                Block([(xpos - 130, ypos + 100), (xpos - 130, ypos + 200), 
+                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, "box", False),
+                Block([(xpos - 15, ypos + 100), (xpos - 15, ypos + 200), 
+                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, "box", False)
     ]
+            
+class Slingshot:
+    def __init__(self, pos):
+        self.pos = pos
+        self.max_stretch = 50
+        self.spring_constant = 12
+        self.stretch = 0
+
+    def spring_potential_energy(self):
+        return .5 * self.spring_constant * (self.stretch ** 2) # PEs = 1/2kx^2
+
 class Player:
     def __init__():
         return

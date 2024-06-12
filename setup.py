@@ -1,5 +1,4 @@
 import pygame
-from slingshot import *
 from bird import *
 from game import *
 from block import *

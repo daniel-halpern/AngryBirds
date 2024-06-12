@@ -28,6 +28,8 @@ def calculate_bird_position(slingshot, bird, game):
     else:
         bird.pos = [bird.pos[0] + (bird.velocity[0] * game.dt) / game.pixels_per_meter, 
                     bird.pos[1] - (bird.velocity[1] * game.dt) / game.pixels_per_meter,]
+        if game.level_list[game.level].name == "target":
+            target_pos = game.level_list[game.level].target_pos
         # If the bird hits the floor, bounce. May want to move to check_collisions()
         if bird.pos[1] + bird.size > game.floor:
             bird.pos[1] = game.floor - bird.size
@@ -35,8 +37,8 @@ def calculate_bird_position(slingshot, bird, game):
             bird.velocity[0] = bird.velocity[0] * game.energy_lost_multiplier
         # If the bird hits the target
         elif (game.level_list[game.level].name == "target" and 
-              bird.pos[1] > 345 and bird.pos[1] < 575 and 
-              bird.pos[0] > 1150 and bird.pos[0] < 1200):
+              bird.pos[1] > target_pos[1] + 70 and bird.pos[1] < target_pos[1] + 300 and 
+              bird.pos[0] > target_pos[0] + 150 and bird.pos[0] < target_pos[0] + 200):
             bird.velocity = [0,0]
             bird.accy = 0
 

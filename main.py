@@ -1,7 +1,6 @@
 import pygame
 from setup import *
 from bird import *
-from slingshot import *
 from game import *
 from events import *
 from draw import *

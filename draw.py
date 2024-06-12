@@ -21,9 +21,8 @@ def draw(screen, bird, slingshot, game):
     draw_blocks(screen, game)
     # If the level is "target", draw the target
     if game.level_list[game.level].name == "target":
-        target_pos = (1000, 275)
         target_image = pygame.image.load('assets/target.png')
-        screen.blit(target_image, target_pos)
+        screen.blit(target_image, game.level_list[game.level].target_pos)
 
     # Draw the bird
     bird_image = pygame.image.load('assets/Red.png')
