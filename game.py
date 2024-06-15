@@ -9,7 +9,7 @@ class Game():
         self.dt = 0
         self.block_list = []
         self.level = level
-        self.level_list = [Level("target"), Level("basketball")]
+        self.level_list = [Level("testing"), Level("target"), Level("basketball")]
         self.level_change_timer = 0
         self.level_change_delay = 500
 
@@ -34,7 +34,14 @@ class Level():
                        (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, "box", False),
                 Block([(xpos - 15, ypos + 100), (xpos - 15, ypos + 200), 
                        (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, "box", False)
-    ]
+             ]
+        elif name == "testing":
+            line1 = line_to_rectangle((100,100), (200, 200), 15)
+            self.block_list = [
+                Block([(500, 500), (600, 600), (600, 700)], 20, "box", False),
+                Block(line1, 0, "box", False)
+
+            ]
             
 class Slingshot:
     def __init__(self, pos):

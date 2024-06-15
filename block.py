@@ -6,6 +6,7 @@ class Block:
         self.angle = angle
         self.type = type
         self.movable = movable
+        self.net_torque = 0
 
         # Calculate center of points
         x_coords = [p[0] for p in point_list]

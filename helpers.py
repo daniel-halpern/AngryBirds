@@ -95,3 +95,20 @@ def check_collisions(bird, game):
 
     # No collision detected
     return False
+
+def line_to_rectangle(start, end, width):
+    # Calculate the direction of the line
+    direction = np.array(end, dtype=float) - np.array(start, dtype=float)
+    direction /= np.linalg.norm(direction)
+
+    # Calculate a vector perpendicular to the line
+    perpendicular = np.array([-direction[1], direction[0]])
+
+    # Calculate the four corners of the rectangle
+    half_width = width / 2
+    p1 = start - half_width * perpendicular
+    p2 = start + half_width * perpendicular
+    p3 = end + half_width * perpendicular
+    p4 = end - half_width * perpendicular
+
+    return [tuple(p1), tuple(p2), tuple(p3), tuple(p4)]
