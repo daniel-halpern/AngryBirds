@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 
 def draw(screen, bird, slingshot, game):
     # Draw the background
@@ -34,7 +35,11 @@ def draw(screen, bird, slingshot, game):
 
     pygame.display.flip()
 
+#pygame.draw.polygon(screen, "brown", block.point_list)
+
 def draw_blocks(screen, game):
     for block in game.level_list[game.level].block_list:
         if block.type == "box":
+            pygame.draw.polygon(screen, "brown", block.point_list)
+        elif block.type == "line":
             pygame.draw.polygon(screen, "brown", block.point_list)

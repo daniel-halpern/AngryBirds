@@ -28,12 +28,12 @@ class Level():
             self.block_list = [
                 # Backboard
                 Block([self.hoop_pos, (xpos, ypos + 435), (xpos + 25, ypos + 435),
-                    (xpos + 25, ypos)], 0, "box", False),
+                    (xpos + 25, ypos)], 0, "line", False),
                 # Hoop
                 Block([(xpos - 130, ypos + 100), (xpos - 130, ypos + 200), 
-                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, "box", False),
+                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, "line", False),
                 Block([(xpos - 15, ypos + 100), (xpos - 15, ypos + 200), 
-                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, "box", False)
+                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, "line", False)
              ]
         elif name == "testing":
             line1 = line_to_rectangle((100,100), (200, 200), 15)
