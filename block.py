@@ -6,7 +6,10 @@ class Block:
         self.angle = angle
         self.type = type
         self.movable = movable
-        self.net_torque = 0
+        self.angular_momentum = 0
+        self.angular_acceleration = 0
+        # Make an actual way of calculating it, not magic number
+        self.rotational_inertia = 1000
 
         # Calculate center of points
         x_coords = [p[0] for p in point_list]

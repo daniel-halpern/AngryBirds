@@ -38,8 +38,8 @@ class Level():
         elif name == "testing":
             line1 = line_to_rectangle((100,100), (200, 200), 15)
             self.block_list = [
-                Block([(500, 500), (600, 600), (600, 700)], 20, "box", False),
-                Block(line1, 0, "box", False)
+                Block([(500, 500), (600, 600), (600, 700)], 20, "box", True),
+                Block(line1, 0, "box", True)
 
             ]
             

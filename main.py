@@ -18,9 +18,11 @@ def main():
             running = False
         elif event_result == 'reset':
             slingshot, bird = reset_game(game.level)
+            game.level_list = Level("testing"), Level("target"), Level("basketball")
 
         handle_mouse_events(bird, slingshot, game)
         check_collisions(bird, game)
+        calculate_block_rotations(game)
 
         # Draws everything
         draw(screen, bird, slingshot, game)

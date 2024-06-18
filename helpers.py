@@ -48,6 +48,7 @@ def check_collisions(bird, game):
         # Calculate the closest point on the polygon to the bird
         closest_point = None
         closest_distance = None
+        # Loops through all the lines in that polygon
         for i in range(len(polygon.point_list)):
             p1 = np.array(polygon.point_list[i])
             p2 = np.array(polygon.point_list[(i+1) % len(polygon.point_list)])
@@ -83,18 +84,46 @@ def check_collisions(bird, game):
                 # Move the bird out of the polygon along the normal
                 bird.pos = list(closest_point + normal * (bird.size))
 
+                # Calculate the initial momentum of the bird
+                initial_momentum = [bird.velocity[0] * bird.mass,
+                                    bird.velocity[1] * bird.mass]
+                # Calculates the lever length
+                r = calculate_r(p1, p2, closest_point)
+
                 # Reflect the bird's velocity on the normal
                 bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal * game.energy_lost_multiplier)
                 bird.velocity[0] = -bird.velocity[0] * game.energy_lost_multiplier
                 bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
 
+                # Fixes an edge case
                 if velocity != [0,0]:
                     bird.velocity[0] = velocity[0] * game.energy_lost_multiplier
                     bird.velocity[1] = velocity[1] * game.energy_lost_multiplier
+
+                # Finishes calculating angular momentum
+                final_bird_momentum = [bird.velocity[0] * bird.mass,
+                                       bird.velocity[1] * bird.mass]
+                block_momentum = [initial_momentum[0] - final_bird_momentum[0], 
+                                  initial_momentum[1] - final_bird_momentum[1]]
+                angle = 90 # Change to actually calculate something
+                #polygon.angular_momentum = [r * block_momentum[0] * math.sin(angle),
+                #                            r * block_momentum[1] * math.sin(angle)]
+                # Calculate the magnitude of the block's momentum
+                block_momentum_magnitude = math.sqrt(block_momentum[0]**2 + block_momentum[1]**2)
+
+                # Calculate the angular momentum
+                polygon.angular_momentum = r * block_momentum_magnitude
+                print(initial_momentum, final_bird_momentum, block_momentum, polygon.angular_momentum)
                 return True
 
     # No collision detected
     return False
+
+def calculate_r(p1, p2, contact):
+    center = list((p1 + p2) / 2)
+    r = math.sqrt((center[0] - contact[0]) ** 2 + (center[1] - contact[1]) ** 2)
+    # If the contact point is above or to the left of the center, r is negative
+    return r if contact[0] < center[0] or contact[1] < center[1] else -r
 
 def line_to_rectangle(start, end, width):
     # Calculate the direction of the line
@@ -112,3 +141,10 @@ def line_to_rectangle(start, end, width):
     p4 = end - half_width * perpendicular
 
     return [tuple(p1), tuple(p2), tuple(p3), tuple(p4)]
+
+def calculate_block_rotations(game):
+    polygons = game.level_list[game.level].block_list
+    for polygon in polygons:
+        if polygon.movable:
+            angular_velocity = polygon.angular_momentum / polygon.rotational_inertia
+            polygon.rotate_points(game.dt*angular_velocity/100)
