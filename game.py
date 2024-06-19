@@ -37,10 +37,12 @@ class Level():
              ]
         elif name == "testing":
             line1 = line_to_rectangle((100,100), (200, 200), 15)
+            line2 = line_to_rectangle((700,300), (300, 700), 15)
             self.block_list = [
+                Block(line2, 20, "box", False),
                 Block([(500, 500), (600, 600), (600, 700)], 20, "box", True),
-                Block(line1, 0, "box", True)
-
+                Block(line1, 0, "box", True),
+                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, "box", True)
             ]
             
 class Slingshot:

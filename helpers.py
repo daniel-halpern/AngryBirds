@@ -83,6 +83,14 @@ def check_collisions(bird, game):
 
                 # Move the bird out of the polygon along the normal
                 bird.pos = list(closest_point + normal * (bird.size))
+                angle = math.atan2(normal[1], normal[0]) 
+                for i in range(10):
+                    t = max(0, min(1, np.dot(np.array(bird.pos) - p1, edge) / np.dot(edge, edge)))
+                    closest = p1 + t * edge
+                    distance = np.linalg.norm(closest - np.array(bird.pos))
+                    if distance <= bird.size:
+                        bird.pos[0] = bird.pos[0] + .5 * math.cos(angle)
+                        bird.pos[1] = bird.pos[1] + .5 * math.sin(angle)
 
                 # Calculate the initial momentum of the bird
                 initial_momentum = [bird.velocity[0] * bird.mass,
@@ -91,7 +99,7 @@ def check_collisions(bird, game):
                 r = calculate_r(p1, p2, closest_point)
 
                 # Reflect the bird's velocity on the normal
-                bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal * game.energy_lost_multiplier)
+                bird.velocity = list(np.array(bird.velocity) - 2 * np.dot(np.array(bird.velocity), normal) * normal) #* game.energy_lost_multiplier
                 bird.velocity[0] = -bird.velocity[0] * game.energy_lost_multiplier
                 bird.velocity[1] = -bird.velocity[1] * game.energy_lost_multiplier
 
@@ -113,7 +121,6 @@ def check_collisions(bird, game):
 
                 # Calculate the angular momentum
                 polygon.angular_momentum = r * block_momentum_magnitude
-                print(initial_momentum, final_bird_momentum, block_momentum, polygon.angular_momentum)
                 return True
 
     # No collision detected
