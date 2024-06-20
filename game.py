@@ -28,21 +28,21 @@ class Level():
             self.block_list = [
                 # Backboard
                 Block([self.hoop_pos, (xpos, ypos + 435), (xpos + 25, ypos + 435),
-                    (xpos + 25, ypos)], 0, "line", False),
+                    (xpos + 25, ypos)], 0, 500, "line", False),
                 # Hoop
                 Block([(xpos - 130, ypos + 100), (xpos - 130, ypos + 200), 
-                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, "line", False),
+                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, 100, "line", False),
                 Block([(xpos - 15, ypos + 100), (xpos - 15, ypos + 200), 
-                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, "line", False)
+                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, 100, "line", False)
              ]
         elif name == "testing":
             line1 = line_to_rectangle((100,100), (200, 200), 15)
             line2 = line_to_rectangle((700,300), (300, 700), 15)
             self.block_list = [
-                Block(line2, 20, "box", False),
-                Block([(500, 500), (600, 600), (600, 700)], 20, "box", True),
-                Block(line1, 0, "box", True),
-                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, "box", True)
+                Block(line2, 20, 500, "box", False),
+                Block([(500, 500), (600, 600), (600, 700)], 20, 100, "box", True),
+                Block(line1, 0, 100, "box", True),
+                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, 250, "box", True)
             ]
             
 class Slingshot:

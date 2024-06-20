@@ -149,9 +149,23 @@ def line_to_rectangle(start, end, width):
 
     return [tuple(p1), tuple(p2), tuple(p3), tuple(p4)]
 
-def calculate_block_rotations(game):
+def handle_block_movement(game):
     polygons = game.level_list[game.level].block_list
     for polygon in polygons:
         if polygon.movable:
+            #polygon.velocity[0] = polygon.velocity[0] + polygon.accx * game.dt
+            polygon.velocity[1] = polygon.velocity[1] + polygon.accy * game.dt
+            polygon.point_list = calculate_block_pos(polygon, game)
+            polygon.center = polygon.calculate_block_center()
             angular_velocity = polygon.angular_momentum / polygon.rotational_inertia
             polygon.rotate_points(game.dt*angular_velocity/100)
+            # Check for collisions here
+            # If there was a collision, 
+
+def calculate_block_pos(block, game):
+    new_point_list = []
+    for point in block.point_list:
+        new_point = [point[0] + (block.velocity[0] * game.dt) / game.pixels_per_meter,
+                 point[1] - (block.velocity[1] * game.dt) / game.pixels_per_meter]
+        new_point_list.append(new_point)
+    return new_point_list

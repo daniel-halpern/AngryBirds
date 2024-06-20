@@ -1,20 +1,25 @@
 from helpers import *
 
 class Block: 
-    def __init__(self, point_list, angle, type, movable):
+    def __init__(self, point_list, angle, mass, type, movable):
         self.point_list = point_list
         self.angle = angle
         self.type = type
         self.movable = movable
         self.angular_momentum = 0
         self.angular_acceleration = 0
-        # Make an actual way of calculating it, not magic number
-        self.rotational_inertia = 1000
+        self.velocity = [0, 0]
+        self.accy = -.2
+        self.mass = mass
+        # Make an actual way of calculating it
+        r = 100
+        self.rotational_inertia = .5 * mass * r 
 
         # Calculate center of points
-        x_coords = [p[0] for p in point_list]
-        y_coords = [p[1] for p in point_list]
-        self.center = (sum(x_coords) / len(point_list), sum(y_coords) / len(point_list))
+        #x_coords = [p[0] for p in point_list]
+        #y_coords = [p[1] for p in point_list]
+        #self.center = (sum(x_coords) / len(point_list), sum(y_coords) / len(point_list))
+        self.center = self.calculate_block_center()
 
         # Rotate points
         self.point_list = self.rotate_points(self.angle)
@@ -35,3 +40,10 @@ class Block:
             rotated_points.append(point)
             self.point_list = rotated_points
         return rotated_points
+    
+    def calculate_block_center(self):
+        # Calculate center of points
+        x_coords = [p[0] for p in self.point_list]
+        y_coords = [p[1] for p in self.point_list]
+        center = (sum(x_coords) / len(self.point_list), sum(y_coords) / len(self.point_list))
+        return center

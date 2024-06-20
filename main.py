@@ -22,7 +22,7 @@ def main():
 
         handle_mouse_events(bird, slingshot, game)
         check_collisions(bird, game)
-        calculate_block_rotations(game)
+        handle_block_movement(game)
 
         # Draws everything
         draw(screen, bird, slingshot, game)
