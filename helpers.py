@@ -161,22 +161,28 @@ def handle_block_movement(game):
             block.center = block.calculate_block_center()
             angular_velocity = block.angular_momentum / block.rotational_inertia
             block.rotate_points(game.dt*angular_velocity/100)
-            # Check for collisions here
+            # Check for collisions between blocks here
             for other_polygon in blocks:
                 if block != other_polygon and check_block_collisions(block, other_polygon):
-                    # Handle collision here
-                    # This is just a placeholder. You'll need to replace this with your actual collision handling code.
                     print(f"Collision detected between {block.center} and {other_polygon.center}")
                     handle_block_collision(block, other_polygon)
+            # Check for collision between the block and the floor here
             for point in block.point_list:
                 if point[1] > game.floor:
-                    handle_floor_collision(block)
+                    handle_floor_collision(block, game, point[1])
                     break
 
-def handle_floor_collision(block):
-    block.velocity = [0, 0]
-    block.accy = 0
-    return
+def handle_floor_collision(block, game, pointy):
+    difference = pointy - game.floor
+    new_point_list = []
+    for point in block.point_list:
+        new_point_list.append((point[0], point[1] - difference - 1))
+    block.point_list = new_point_list
+    block.velocity[1] = -block.velocity[1] * game.energy_lost_multiplier
+    # If the block's velocity is now very small, set it to zero to prevent it from bouncing indefinitely
+    if abs(block.velocity[1]) < 1:
+        block.velocity[1] = 0
+        block.accy = 0
 
 def handle_block_collision(block1, block2):
     block1.velocity = [0, 0]
