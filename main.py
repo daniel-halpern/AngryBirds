@@ -21,7 +21,7 @@ def main():
             game.level_list = Level("testing"), Level("target"), Level("basketball")
 
         handle_mouse_events(bird, slingshot, game)
-        check_collisions(bird, game)
+        check_bird_collisions(bird, game)
         handle_block_movement(game)
 
         # Draws everything

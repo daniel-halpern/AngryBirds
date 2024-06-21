@@ -42,16 +42,16 @@ def calculate_bird_position(slingshot, bird, game):
             bird.velocity = [0,0]
             bird.accy = 0
 
-def check_collisions(bird, game):
-    polygons = game.level_list[game.level].block_list
-    for polygon in polygons:
-        # Calculate the closest point on the polygon to the bird
+def check_bird_collisions(bird, game):
+    blocks = game.level_list[game.level].block_list
+    for block in blocks:
+        # Calculate the closest point on the block to the bird
         closest_point = None
         closest_distance = None
-        # Loops through all the lines in that polygon
-        for i in range(len(polygon.point_list)):
-            p1 = np.array(polygon.point_list[i])
-            p2 = np.array(polygon.point_list[(i+1) % len(polygon.point_list)])
+        # Loops through all the lines in that block
+        for i in range(len(block.point_list)):
+            p1 = np.array(block.point_list[i])
+            p2 = np.array(block.point_list[(i+1) % len(block.point_list)])
 
             # Calculate the closest point on the edge to the bird
             edge = p2 - p1
@@ -64,7 +64,7 @@ def check_collisions(bird, game):
                 closest_point = closest
                 closest_distance = distance
 
-            # If the bird is colliding with the polygon, adjust its position and velocity
+            # If the bird is colliding with the block, adjust its position and velocity
             if closest_distance <= bird.size:
                 # Calculate the normal of the surface the bird is colliding with
                 normal = (np.array(bird.pos) - closest_point)
@@ -81,7 +81,7 @@ def check_collisions(bird, game):
                 elif normal[1] == 0: # Collides with left / right
                     velocity = [-bird.velocity[0], bird.velocity[1]]
 
-                # Move the bird out of the polygon along the normal
+                # Move the bird out of the block along the normal
                 bird.pos = list(closest_point + normal * (bird.size))
                 angle = math.atan2(normal[1], normal[0]) 
                 for i in range(10):
@@ -91,6 +91,8 @@ def check_collisions(bird, game):
                     if distance <= bird.size:
                         bird.pos[0] = bird.pos[0] + .5 * math.cos(angle)
                         bird.pos[1] = bird.pos[1] + .5 * math.sin(angle)
+                    else:
+                        break
 
                 # Calculate the initial momentum of the bird
                 initial_momentum = [bird.velocity[0] * bird.mass,
@@ -114,13 +116,13 @@ def check_collisions(bird, game):
                 block_momentum = [initial_momentum[0] - final_bird_momentum[0], 
                                   initial_momentum[1] - final_bird_momentum[1]]
                 angle = 90 # Change to actually calculate something
-                #polygon.angular_momentum = [r * block_momentum[0] * math.sin(angle),
+                #block.angular_momentum = [r * block_momentum[0] * math.sin(angle),
                 #                            r * block_momentum[1] * math.sin(angle)]
                 # Calculate the magnitude of the block's momentum
                 block_momentum_magnitude = math.sqrt(block_momentum[0]**2 + block_momentum[1]**2)
 
                 # Calculate the angular momentum
-                polygon.angular_momentum = r * block_momentum_magnitude
+                block.angular_momentum = r * block_momentum_magnitude
                 return True
 
     # No collision detected
@@ -150,17 +152,71 @@ def line_to_rectangle(start, end, width):
     return [tuple(p1), tuple(p2), tuple(p3), tuple(p4)]
 
 def handle_block_movement(game):
-    polygons = game.level_list[game.level].block_list
-    for polygon in polygons:
-        if polygon.movable:
-            #polygon.velocity[0] = polygon.velocity[0] + polygon.accx * game.dt
-            polygon.velocity[1] = polygon.velocity[1] + polygon.accy * game.dt
-            polygon.point_list = calculate_block_pos(polygon, game)
-            polygon.center = polygon.calculate_block_center()
-            angular_velocity = polygon.angular_momentum / polygon.rotational_inertia
-            polygon.rotate_points(game.dt*angular_velocity/100)
+    blocks = game.level_list[game.level].block_list
+    for block in blocks:
+        if block.movable:
+            #block.velocity[0] = block.velocity[0] + block.accx * game.dt
+            block.velocity[1] = block.velocity[1] + block.accy * game.dt
+            block.point_list = calculate_block_pos(block, game)
+            block.center = block.calculate_block_center()
+            angular_velocity = block.angular_momentum / block.rotational_inertia
+            block.rotate_points(game.dt*angular_velocity/100)
             # Check for collisions here
-            # If there was a collision, 
+            for other_polygon in blocks:
+                if block != other_polygon and check_block_collisions(block, other_polygon):
+                    # Handle collision here
+                    # This is just a placeholder. You'll need to replace this with your actual collision handling code.
+                    print(f"Collision detected between {block.center} and {other_polygon.center}")
+                    handle_block_collision(block, other_polygon)
+            for point in block.point_list:
+                if point[1] > game.floor:
+                    handle_floor_collision(block)
+                    break
+
+def handle_floor_collision(block):
+    block.velocity = [0, 0]
+    block.accy = 0
+    return
+
+def handle_block_collision(block1, block2):
+    block1.velocity = [0, 0]
+    block1.accy = 0
+    block2.velocity = [0, 0]
+    block2.accy = 0
+
+def check_block_collisions(block1, block2):
+    # Get the axes to test against
+    axes = get_axes(block1) + get_axes(block2)
+    # Check each axis for overlap
+    for axis in axes:
+        projection1 = project(block1, axis)
+        projection2 = project(block2, axis)
+        if not overlap(projection1, projection2):
+            # If there's no overlap on this axis, the blocks are not colliding
+            return False
+
+    # If we've checked all axes and found overlap on all of them, the blocks are colliding
+    return True
+
+def get_axes(block):
+    # Returns the normal of each edge of the block
+    axes = []
+    for i in range(len(block.point_list)):
+        point1 = np.array(block.point_list[i])
+        point2 = np.array(block.point_list[i - 1])
+        edge = point1 - point2
+        normal = np.array([-edge[1], edge[0]])
+        axes.append(normal / np.linalg.norm(normal))  # Normalize the vector
+    return axes
+
+def project(block, axis):
+    # Projects the block onto the axis
+    dots = [np.dot(point, axis) for point in block.point_list]
+    return [min(dots), max(dots)]
+
+def overlap(projection1, projection2):
+    # Checks if two projections overlap
+    return not (projection1[1] < projection2[0] or projection2[1] < projection1[0])
 
 def calculate_block_pos(block, game):
     new_point_list = []
