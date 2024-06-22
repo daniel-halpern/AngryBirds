@@ -116,19 +116,19 @@ def check_bird_collisions(bird, game):
                 block_momentum = [initial_momentum[0] - final_bird_momentum[0], 
                                   initial_momentum[1] - final_bird_momentum[1]]
                 angle = 90 # Change to actually calculate something
-                #block.angular_momentum = [r * block_momentum[0] * math.sin(angle),
-                #                            r * block_momentum[1] * math.sin(angle)]
                 # Calculate the magnitude of the block's momentum
                 block_momentum_magnitude = math.sqrt(block_momentum[0]**2 + block_momentum[1]**2)
 
                 # Calculate the angular momentum
-                block.angular_momentum = r * block_momentum_magnitude
+                block.angular_momentum = block.angular_momentum + r * block_momentum_magnitude
                 return True
 
     # No collision detected
     return False
 
 def calculate_r(p1, p2, contact):
+    p1 = np.array(p1)
+    p2 = np.array(p2)
     center = list((p1 + p2) / 2)
     r = math.sqrt((center[0] - contact[0]) ** 2 + (center[1] - contact[1]) ** 2)
     # If the contact point is above or to the left of the center, r is negative
@@ -155,7 +155,7 @@ def handle_block_movement(game):
     blocks = game.level_list[game.level].block_list
     for block in blocks:
         if block.movable:
-            #block.velocity[0] = block.velocity[0] + block.accx * game.dt
+            # Add some code here to calculate block horizontal velocity
             block.velocity[1] = block.velocity[1] + block.accy * game.dt
             block.point_list = calculate_block_pos(block, game)
             block.center = block.calculate_block_center()
@@ -164,25 +164,44 @@ def handle_block_movement(game):
             # Check for collisions between blocks here
             for other_polygon in blocks:
                 if block != other_polygon and check_block_collisions(block, other_polygon):
-                    print(f"Collision detected between {block.center} and {other_polygon.center}")
                     handle_block_collision(block, other_polygon)
             # Check for collision between the block and the floor here
             for point in block.point_list:
                 if point[1] > game.floor:
-                    handle_floor_collision(block, game, point[1])
+                    handle_floor_collision(block, game, point)
                     break
 
-def handle_floor_collision(block, game, pointy):
+def handle_floor_collision(block, game, contact):
+    pointy = contact[1]
     difference = pointy - game.floor
     new_point_list = []
+    furthest_distance = 0
+    furthest_point_along_x = contact
     for point in block.point_list:
         new_point_list.append((point[0], point[1] - difference - 1))
+        if abs(point[0] - contact[0]) > furthest_distance:
+            furthest_point_along_x = point
+            furthest_distance = abs(point[0] - contact[0])
+
     block.point_list = new_point_list
     block.velocity[1] = -block.velocity[1] * game.energy_lost_multiplier
     # If the block's velocity is now very small, set it to zero to prevent it from bouncing indefinitely
-    if abs(block.velocity[1]) < 1:
+    if abs(block.velocity[1]) < .1:
         block.velocity[1] = 0
         block.accy = 0
+
+    # Calculate the change in angular momentum
+    r = calculate_r(contact, furthest_point_along_x, contact)
+    block.angular_momentum = block.angular_momentum + r * block.mass * 10
+
+    # This does not work great at preventing vibrating blocks when hitting the ground
+    # Definitely redo this
+    # Apply a damping factor to the block's angular momentum
+    damping_factor = 0.95
+    block.angular_momentum *= (damping_factor ** block.collision_count)
+    # If the block's angular momentum is now very small, set it to zero to prevent it from rotating indefinitely
+    if abs(block.angular_momentum) < 400: 
+        block.angular_momentum = 0
 
 def handle_block_collision(block1, block2):
     block1.velocity = [0, 0]
