@@ -18,7 +18,7 @@ def main():
             running = False
         elif event_result == 'reset':
             slingshot, bird = reset_game(game.level)
-            game.level_list = Level("testing"), Level("target"), Level("basketball")
+            game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
 
         handle_mouse_events(bird, slingshot, game)
         check_bird_collisions(bird, game)

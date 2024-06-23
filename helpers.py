@@ -161,6 +161,7 @@ def handle_block_movement(game):
             block.center = block.calculate_block_center()
             angular_velocity = block.angular_momentum / block.rotational_inertia
             block.rotate_points(game.dt*angular_velocity/100)
+            block.angle += round(math.degrees(game.dt*angular_velocity/100))
             # Check for collisions between blocks here
             for other_polygon in blocks:
                 if block != other_polygon and check_block_collisions(block, other_polygon):
@@ -185,29 +186,19 @@ def handle_floor_collision(block, game, contact):
 
     block.point_list = new_point_list
     block.velocity[1] = -block.velocity[1] * game.energy_lost_multiplier
-    # If the block's velocity is now very small, set it to zero to prevent it from bouncing indefinitely
-    if abs(block.velocity[1]) < .1:
-        block.velocity[1] = 0
-        block.accy = 0
 
     # Calculate the change in angular momentum
     r = calculate_r(contact, furthest_point_along_x, contact)
-    block.angular_momentum = block.angular_momentum + r * block.mass * 10
-
-    # This does not work great at preventing vibrating blocks when hitting the ground
-    # Definitely redo this
-    # Apply a damping factor to the block's angular momentum
-    damping_factor = 0.95
-    block.angular_momentum *= (damping_factor ** block.collision_count)
-    # If the block's angular momentum is now very small, set it to zero to prevent it from rotating indefinitely
-    if abs(block.angular_momentum) < 400: 
-        block.angular_momentum = 0
+    change_in_angular_momentum = r * block.mass * (math.sin(math.radians((90 + block.angle) % 360)) % math.pi)
+    print((math.sin(math.radians((90 + block.angle) % 360)) % math.pi), r, change_in_angular_momentum, block.angular_momentum)
+    block.angular_momentum = block.angular_momentum + change_in_angular_momentum
+    block.collision_count += 1
 
 def handle_block_collision(block1, block2):
     block1.velocity = [0, 0]
-    block1.accy = 0
+    #block1.accy = 0
     block2.velocity = [0, 0]
-    block2.accy = 0
+    #block2.accy = 0
 
 def check_block_collisions(block1, block2):
     # Get the axes to test against

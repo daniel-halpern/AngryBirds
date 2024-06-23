@@ -9,13 +9,13 @@ class Game():
         self.dt = 0
         self.block_list = []
         self.level = level
-        self.level_list = [Level("testing"), Level("target"), Level("basketball")]
+        self.level_list = [Level(self, "testing"), Level(self, "target"), Level(self, "basketball")]
         self.level_change_timer = 0
         self.level_change_delay = 500
 
 
 class Level():
-    def __init__(self, name):
+    def __init__(self, game, name):
         self.name = name
         if name == "target":
             self.block_list = []
@@ -38,12 +38,27 @@ class Level():
         elif name == "testing":
             line1 = line_to_rectangle((100,100), (200, 200), 15)
             line2 = line_to_rectangle((700,300), (300, 700), 15)
+            top_line = line_to_rectangle((800, 400), (900, 400), 20)
+            side_line = line_to_rectangle((820, 420), (820, 500), 20)
+            side_line2 = line_to_rectangle((880, 420), (880, 500), 20)
             self.block_list = [
                 Block(line2, 20, 500, "box", False),
                 Block([(500, 500), (600, 600), (600, 700)], 20, 100, "box", True),
                 Block(line1, 0, 100, "box", True),
-                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, 250, "box", True)
+                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, 250, "box", True),
+                Block(top_line, 0, 100, "box", True),
+                Block(side_line, 0, 100, "box", True),
+                Block(side_line2, 0, 100, "box", True)
             ]
+            top_line = line_to_rectangle((800, 400), (1000, 400), 20)
+            side_line = line_to_rectangle((810, 410), (810, game.floor), 20)
+            side_line2 = line_to_rectangle((990, 410), (990, game.floor), 20)
+            self.block_list = [
+                Block(top_line, 0, 100, "box", True),
+                Block(side_line, 0, 100, "box", True),
+                Block(side_line2, 0, 100, "box", True)
+            ]
+            self.block_list = [Block(top_line, 90, 100, "box", True)]
             
 class Slingshot:
     def __init__(self, pos):
