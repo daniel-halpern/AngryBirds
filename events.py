@@ -18,6 +18,8 @@ def handle_events(game):
         game.level = (game.level + 1) % len(game.level_list)
         game.level_change_timer = current_time
         return 'reset'
+    if keys[pygame.K_e]:
+        return 'new bird'
 
     return True
 

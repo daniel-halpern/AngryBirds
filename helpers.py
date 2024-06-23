@@ -115,6 +115,7 @@ def check_bird_collisions(bird, game):
                                        bird.velocity[1] * bird.mass]
                 block_momentum = [initial_momentum[0] - final_bird_momentum[0], 
                                   initial_momentum[1] - final_bird_momentum[1]]
+                block.velocity = [block_momentum[0] / block.mass, block_momentum[1] / block.mass]
                 angle = 90 # Change to actually calculate something
                 # Calculate the magnitude of the block's momentum
                 block_momentum_magnitude = math.sqrt(block_momentum[0]**2 + block_momentum[1]**2)
@@ -151,7 +152,7 @@ def line_to_rectangle(start, end, width):
 
     return [tuple(p1), tuple(p2), tuple(p3), tuple(p4)]
 
-def handle_block_movement(game):
+def handle_block_movement(game, bird):
     blocks = game.level_list[game.level].block_list
     for block in blocks:
         if block.movable:
@@ -165,7 +166,8 @@ def handle_block_movement(game):
             # Check for collisions between blocks here
             for other_polygon in blocks:
                 if block != other_polygon and check_block_collisions(block, other_polygon):
-                    handle_block_collision(block, other_polygon)
+                    handle_block_collision(block, other_polygon, game, bird)
+                    reverse_block_pos(block, other_polygon, game)
             # Check for collision between the block and the floor here
             for point in block.point_list:
                 if point[1] > game.floor:
@@ -185,20 +187,27 @@ def handle_floor_collision(block, game, contact):
             furthest_distance = abs(point[0] - contact[0])
 
     block.point_list = new_point_list
+    block.velocity[0] *= game.energy_lost_multiplier
     block.velocity[1] = -block.velocity[1] * game.energy_lost_multiplier
 
     # Calculate the change in angular momentum
     r = calculate_r(contact, furthest_point_along_x, contact)
-    change_in_angular_momentum = r * block.mass * (math.sin(math.radians((90 + block.angle) % 360)) % math.pi)
+    change_in_angular_momentum = r * block.mass * (math.sin(math.radians((block.angle) % 360)) % math.pi)
     print((math.sin(math.radians((90 + block.angle) % 360)) % math.pi), r, change_in_angular_momentum, block.angular_momentum)
     block.angular_momentum = block.angular_momentum + change_in_angular_momentum
     block.collision_count += 1
 
-def handle_block_collision(block1, block2):
-    block1.velocity = [0, 0]
+def handle_block_collision(block1, block2, game, bird):
+    initial_momentum = [bird.velocity[0] * bird.mass + block1.velocity[0] * block1.mass,
+                        bird.velocity[1] * bird.mass + block1.velocity[1] * block1.mass]
+    final_bird_momentum = [bird.velocity[0] * bird.mass,
+                        bird.velocity[1] * bird.mass]
+    #final_block_momentum = 
+    #block1.velocity = [0, 0]
     #block1.accy = 0
-    block2.velocity = [0, 0]
+    #block2.velocity = [0, 0]
     #block2.accy = 0
+    return
 
 def check_block_collisions(block1, block2):
     # Get the axes to test against
@@ -241,3 +250,12 @@ def calculate_block_pos(block, game):
                  point[1] - (block.velocity[1] * game.dt) / game.pixels_per_meter]
         new_point_list.append(new_point)
     return new_point_list
+
+def reverse_block_pos(block, other_polygon, game):
+    while check_block_collisions(block, other_polygon):
+        new_point_list = []
+        for point in block.point_list:
+            new_point = [point[0] - (block.velocity[0] * game.dt * .1) / game.pixels_per_meter,
+                    point[1] + (block.velocity[1] * game.dt * .1) / game.pixels_per_meter]
+            new_point_list.append(new_point)
+        block.point_list = new_point_list
