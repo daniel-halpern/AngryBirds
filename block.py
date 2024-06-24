@@ -7,15 +7,17 @@ class Block:
         self.type = type
         self.movable = movable
         self.angular_momentum = 0
+        self.angular_velocity = 0
         self.angular_acceleration = 0
         self.velocity = [0, 0]
-        self.accy = -.1
+        self.accy = 0#-.1
         self.mass = mass
         # Make an actual way of calculating it
         r = 100
         self.rotational_inertia = .5 * mass * r 
         self.center = self.calculate_block_center()
         self.collision_count = 0
+        self.net_torque = 0
 
         # Rotate points
         self.point_list = self.rotate_points(self.angle)
@@ -47,3 +49,33 @@ class Block:
         y_coords = [p[1] for p in self.point_list]
         center = (sum(x_coords) / len(self.point_list), sum(y_coords) / len(self.point_list))
         return center
+    
+    def calculate_net_torque(self, game):
+        blocks = game.level_list[game.level].block_list
+        for block in blocks:
+            if block != self:
+                if check_block_collisions(self, block):
+                    self.net_torque += self.calculate_torque(block)
+                else:
+                    self.net_torque = 0
+        return self.net_torque
+
+    def calculate_torque(self, block):
+        r = self.block_calculate_r(block)
+        return self.mass * r
+
+    def block_calculate_r(self, block):
+        # Assuming 'self' is the block for which we're calculating torque
+        center_self = self.calculate_block_center()
+        
+        # Approximate point of collision as the center of the other block
+        collision_point = block.calculate_block_center()
+        
+        # Calculate vector (r_vector) from the block's center to the collision point
+        r_vector = (collision_point[0] - center_self[0], collision_point[1] - center_self[1])
+        
+        # Use the x-component of r_vector as r to include direction
+        r = r_vector[0]
+        #print(r, center_self, collision_point)
+        
+        return r
