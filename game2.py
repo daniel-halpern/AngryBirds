@@ -1,4 +1,4 @@
-from block import *
+from block2 import *
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -12,7 +12,7 @@ class Game():
         self.clock = pygame.time.Clock()
         self.dt = 0
         # Level related
-        self.floor = 625
+        self.floor = 628
         self.block_list = []
         self.level = level
         self.level_list = [Level(self, "testing"), Level(self, "target"), Level(self, "basketball")]
@@ -30,51 +30,20 @@ class Level():
         if name == "target":
             self.block_list = []
             self.target_pos = (1000, 275)
-
+            self.block_list = [Block((500, 500), (100, 200), 100, 'wood')]
         elif name == "basketball":
             self.hoop_pos = (1000, 200)
             xpos = self.hoop_pos[0]
             ypos = self.hoop_pos[1]
-            self.block_list = [
-                # Backboard
-                Block([self.hoop_pos, (xpos, ypos + 435), (xpos + 25, ypos + 435),
-                    (xpos + 25, ypos)], 0, 500, "line", False),
-                # Hoop
-                Block([(xpos - 130, ypos + 100), (xpos - 130, ypos + 200), 
-                       (xpos - 120, ypos + 200), (xpos - 120, ypos + 100)], 160, 100, "line", False),
-                Block([(xpos - 15, ypos + 100), (xpos - 15, ypos + 200), 
-                       (xpos - 25, ypos + 200), (xpos - 25, ypos + 100)], 20, 100, "line", False)
-             ]
+            self.block_list = [Block((500, 500), (100, 200), 100, 'wood')]
         elif name == "testing":
-            line1 = line_to_rectangle((100,100), (200, 200), 15)
-            line2 = line_to_rectangle((700,300), (300, 700), 15)
-            top_line = line_to_rectangle((800, 400), (900, 400), 20)
-            side_line = line_to_rectangle((820, 420), (820, 500), 20)
-            side_line2 = line_to_rectangle((880, 420), (880, 500), 20)
-            self.block_list = [
-                Block(line2, 20, 500, "box", False),
-                Block([(500, 500), (600, 600), (600, 700)], 20, 100, "box", True),
-                Block(line1, 0, 100, "box", True),
-                Block([(300, 300), (300, 400), (400, 400), (400, 300)], 0, 250, "box", True),
-                Block(top_line, 0, 100, "box", True),
-                Block(side_line, 0, 100, "box", True),
-                Block(side_line2, 0, 100, "box", True)
-            ]
-            top_line = line_to_rectangle((800, 400), (1000, 400), 20)
-            side_line = line_to_rectangle((810, 410), (810, game.floor), 20)
-            side_line2 = line_to_rectangle((990, 410), (990, game.floor), 20)
-            self.block_list = [
-                #Block(top_line, 0, 100, "box", True),
-                Block(side_line, 45, 100, "box", True),
-                Block(side_line2, 0, 100, "box", True)
-            ]
-            #self.block_list = [Block(top_line, 90, 100, "box", True)]
+            self.block_list = [Block((500, 500), (100, 200), 100, 'ice')]
             
 class Slingshot:
     def __init__(self, pos):
         self.pos = pos
         self.max_stretch = 50
-        self.spring_constant = 100
+        self.spring_constant = 500
         self.stretch = 0
 
     def spring_potential_energy(self):

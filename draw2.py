@@ -26,7 +26,41 @@ def draw(game, space, bird, slingshot):
     pos = pymunk.pygame_util.to_pygame(bird.body.position, game.screen)
     angle_degrees = math.degrees(bird.body.angle)
     rotated_image = pygame.transform.rotate(bird.image, -angle_degrees)  # Pygame rotates counterclockwise, pymunk uses clockwise rotation
-    new_pos = (pos[0] - rotated_image.get_width() / 2, pos[1] - rotated_image.get_height() / 2)
+    new_pos = (pos[0] - rotated_image.get_width() / 2 - 3, pos[1] - rotated_image.get_height() / 2 - 3)
     game.screen.blit(rotated_image, new_pos)
 
+    draw_blocks(game, space)
+
     pygame.display.flip()
+
+def draw_blocks(game, space):
+    for block in game.level_list[game.level].block_list:
+        pos = pymunk.pygame_util.to_pygame(block.shape.body.position, game.screen)
+        angle_degrees = math.degrees(block.shape.body.angle)
+        # Just practice using a match-case statement
+        match block.material_type: 
+            case "ice":
+                color = (173, 216, 230)  # Light blue
+            case "stone":
+                color = (128, 128, 128)  # Gray
+            case "wood":
+                color = (139, 69, 19)  # Brown
+            case _:
+                color = (255, 255, 255)  # Default to white if material is unknown
+
+        if hasattr(block.shape, 'size'):
+            width, height = block.shape.size
+        else:
+            width, height = 50, 50  # Default size
+        
+        # Create a surface to draw the rotated block
+        surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        pygame.draw.rect(surface, color, surface.get_rect())
+        rotated_surface = pygame.transform.rotate(surface, -angle_degrees)
+        
+        # Calculate the new position after rotation
+        new_pos = (pos[0] - rotated_surface.get_width() / 2, pos[1] - rotated_surface.get_height() / 2)
+        game.screen.blit(rotated_surface, new_pos)
+        
+        draw_options = pymunk.pygame_util.DrawOptions(game.screen)
+        space.debug_draw(draw_options)

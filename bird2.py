@@ -14,7 +14,7 @@ class Bird:
         self.body.position = pos
         self.shape = pymunk.Circle(self.body, self.radius, (0,0))
         self.shape.elasticity = .8
-        self.shape.friction = 15
+        self.shape.friction = .8
         # Load the bird image
         self.image = pygame.image.load('assets/Red.png')
         self.image = pygame.transform.scale(self.image, (50, 50))

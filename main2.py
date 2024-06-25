@@ -9,7 +9,6 @@ def main():
     game, space, running, slingshot, bird = initialize_game()
     while running:
         game.dt = game.clock.tick(60)
-
         event_result = handle_events(game)
         if event_result == False:
             running = False
@@ -25,7 +24,6 @@ def main():
         if mouse_buttons_pressed[0] and bird.in_slingshot:
             mouse_pos = pygame.mouse.get_pos()
             bird.body.position = mouse_pos
-            print(bird.body.position)
             slingshot.stretch = calculate_bird_position2(slingshot, bird, game)
         elif bird.in_slingshot and abs(slingshot.stretch) > 0:
             space.gravity = (0.0, 900.0)
