@@ -1,7 +1,8 @@
 import pymunk
+import math
 
 class Block:
-    def __init__(self, position, size, mass, material_type, movable=True):
+    def __init__(self, position, size, mass, angle_degrees, material_type, movable):
         self.position = position
         self.size = size
         self.mass = mass
@@ -10,8 +11,9 @@ class Block:
         self.moment = pymunk.moment_for_box(self.mass, self.size)
         self.body = pymunk.Body(self.mass, self.moment)
         self.shape = pymunk.Poly.create_box(self.body, self.size)
+        self.body.angle = math.radians(angle_degrees)
         if not self.movable:
-            self.body_type = pymunk.Body.STATIC
+            self.body.body_type = pymunk.Body.STATIC
         self.body.position = self.position
         self.set_material_properties(self.shape)
 

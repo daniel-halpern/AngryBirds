@@ -25,7 +25,7 @@ def main():
         if mouse_buttons_pressed[0] and bird.in_slingshot:
             mouse_pos = pygame.mouse.get_pos()
             bird.body.position = mouse_pos
-            slingshot.stretch = calculate_bird_position2(slingshot, bird, game)
+            slingshot.stretch = calculate_bird_position(slingshot, bird, game)
         elif bird.in_slingshot and abs(slingshot.stretch) > 0:
             bird.in_slingshot = False
             bird.calculate_velocity(slingshot.spring_potential_energy(), 
@@ -36,6 +36,8 @@ def main():
         if bird.in_slingshot:
             force = bird.body.mass * space.gravity
             bird.body.apply_force_at_local_point(-force, (0, 0))
+
+        check_target_collision(game, bird, space)
 
         # Draws everything
         draw(game, space, bird, slingshot)

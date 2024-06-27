@@ -30,20 +30,19 @@ class Level():
         if name == "target":
             self.block_list = []
             self.target_pos = (1000, 275)
-            self.block_list = [Block((500, 500), (100, 200), 100, 'wood')]
         elif name == "basketball":
-            self.hoop_pos = (1000, 200)
-            xpos = self.hoop_pos[0]
-            ypos = self.hoop_pos[1]
-            self.block_list = [Block((500, 500), (100, 200), 100, 'wood')]
+            xpos = 500
+            self.block_list = [Block((xpos + 400, 350), (10, 100), 100, 170, 'wood', False), # Rim
+                               Block((xpos + 486, 350), (10, 100), 100, 10, 'wood', False), # Rim
+                               Block((xpos + 500, game.floor / 2 + 100), (20, game.floor - 200), 100, 0, 'wood', False)] # Backboard
         elif name == "testing":
-            self.block_list = [Block((500, 500), (100, 200), 100, 'ice')]
+            self.block_list = [Block((500, 500), (100, 200), 100, 20, 'ice', False)]
             
 class Slingshot:
     def __init__(self, pos):
         self.pos = pos
         self.max_stretch = 50
-        self.spring_constant = 500
+        self.spring_constant = 750
         self.stretch = 0
 
     def spring_potential_energy(self):

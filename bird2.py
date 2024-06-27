@@ -6,7 +6,7 @@ import pymunk.pygame_util
 class Bird:
     def __init__(self, pos):
         self.in_slingshot = True
-        self.mass = 5
+        self.mass = 10
         self.radius = 25
         # moment_for_circle args: mass, inner_radius, outer_radius, offset
         self.inertia = pymunk.moment_for_circle(self.mass, 0, self.radius, (0,0))

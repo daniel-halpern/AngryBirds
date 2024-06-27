@@ -13,7 +13,7 @@ def calculate_angle(pos1, pos2):
     deltaY = pos2[1] - pos1[1]
     return math.atan2(deltaY, deltaX)
 
-def calculate_bird_position2(slingshot, bird, game):
+def calculate_bird_position(slingshot, bird, game):
     # If the bird is in the slingshot, limit it to only moving in the circle
     if bird.in_slingshot:
         stretch = calculate_distance(slingshot.pos, bird.body.position)
@@ -23,3 +23,11 @@ def calculate_bird_position2(slingshot, bird, game):
                     slingshot.max_stretch * math.sin(theta) + slingshot.pos[1]]
             stretch = slingshot.max_stretch
         return stretch
+
+def check_target_collision(game, bird, space):
+    if game.level_list[game.level].name == "target":
+        target_pos = game.level_list[game.level].target_pos
+        if (bird.body.position[1] > target_pos[1] + 70 and bird.body.position[1] < target_pos[1] + 300 and 
+            bird.body.position[0] > target_pos[0] + 150 and bird.body.position[0] < target_pos[0] + 200):
+            bird.body.velocity = (0, 0)
+            space.gravity = (0, 0)

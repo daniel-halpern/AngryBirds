@@ -22,6 +22,11 @@ def draw(game, space, bird, slingshot):
     newPos = (slingshot.pos[0] - 25, slingshot.pos[1] - 50)
     game.screen.blit(slingshot_image, newPos) 
 
+    # If the level is "target", draw the target
+    if game.level_list[game.level].name == "target":
+        target_image = pygame.image.load('assets/target.png')
+        game.screen.blit(target_image, game.level_list[game.level].target_pos)
+
     # Draw the bird
     pos = pymunk.pygame_util.to_pygame(bird.body.position, game.screen)
     angle_degrees = math.degrees(bird.body.angle)
