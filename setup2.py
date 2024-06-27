@@ -14,30 +14,8 @@ def initialize_game():
     running = True
     game = Game(0)
     game.screen = pygame.display.set_mode(game.size)
-    game, space, slingshot, bird = reset_game(game)
-    
-    # Pymunk setup
     space = pymunk.Space()
-    space.gravity = (0.0, 0.0)
-
-    # Game objects setup
-
-    slingshot = Slingshot([200,490])
-
-    bird = Bird(slingshot.pos)
-    space.add(bird.body, bird.shape)
-
-    # Ground setup
-    ground_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-    ground_shape = pymunk.Segment(ground_body, (0, game.floor), (game.size[0], game.floor), 0.0)
-    ground_shape.elasticity = 0.8
-    ground_shape.friction = .8
-    space.add(ground_body, ground_shape)
-    space.damping = .6
-
-    # Block setup
-    #for block in game.level_list[game.level].block_list:
-    #    space.add(block.body, block.shape)
+    game, space, slingshot, bird = reset_game(game)
 
     return game, space, running, slingshot, bird
 
@@ -47,7 +25,6 @@ def reset_game(game):
     space.gravity = (0.0, 0.0)
 
     # Game objects setup
-
     slingshot = Slingshot([200,490])
 
     bird = Bird(slingshot.pos)
@@ -60,7 +37,8 @@ def reset_game(game):
     ground_shape.friction = 15
     space.add(ground_body, ground_shape)
     space.damping = .6
-
+    
+    game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
     # Block setup
     for block in game.level_list[game.level].block_list:
         space.add(block.body, block.shape)

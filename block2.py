@@ -27,5 +27,3 @@ class Block:
             shape.elasticity = 0.5
         # Add more materials as needed
 
-    def add_to_space(self, space):
-        space.add(self.shape.body, self.shape)
