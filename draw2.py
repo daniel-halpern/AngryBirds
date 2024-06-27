@@ -48,10 +48,7 @@ def draw_blocks(game, space):
             case _:
                 color = (255, 255, 255)  # Default to white if material is unknown
 
-        if hasattr(block.shape, 'size'):
-            width, height = block.shape.size
-        else:
-            width, height = 50, 50  # Default size
+        width, height = block.size[0], block.size[1]
         
         # Create a surface to draw the rotated block
         surface = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -62,5 +59,5 @@ def draw_blocks(game, space):
         new_pos = (pos[0] - rotated_surface.get_width() / 2, pos[1] - rotated_surface.get_height() / 2)
         game.screen.blit(rotated_surface, new_pos)
         
-        draw_options = pymunk.pygame_util.DrawOptions(game.screen)
-        space.debug_draw(draw_options)
+        #draw_options = pymunk.pygame_util.DrawOptions(game.screen)
+        #space.debug_draw(draw_options)
