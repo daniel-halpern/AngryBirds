@@ -35,8 +35,10 @@ class Level():
             self.block_list = [Block((xpos + 400, 350), (10, 100), 100, 170, 'wood', False), # Rim
                                Block((xpos + 486, 350), (10, 100), 100, 10, 'wood', False), # Rim
                                Block((xpos + 500, game.floor / 2 + 100), (20, game.floor - 200), 100, 0, 'wood', False)] # Backboard
-        elif name == "testing":
-            self.block_list = [Block((500, 500), (100, 200), 100, 20, 'ice', False)]
+        elif name == "testing": # Desperately need to make a way of doing this that is simpler
+            self.block_list = [Block((812, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                               Block((988, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                               Block((800 + (200 / 2), game.floor - (200) - 12), (200, 24), 100, 0, 'wood', True)]
             
 class Slingshot:
     def __init__(self, pos):

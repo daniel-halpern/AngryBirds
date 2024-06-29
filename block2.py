@@ -16,6 +16,7 @@ class Block:
             self.body.body_type = pymunk.Body.STATIC
         self.body.position = self.position
         self.set_material_properties(self.shape)
+        self.shape.collision_type = 1
 
     def set_material_properties(self, shape):
         if self.material_type == 'wood':

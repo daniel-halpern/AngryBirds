@@ -1,6 +1,7 @@
 import pygame
 from bird2 import *
 from game2 import *
+from helpers2 import *
 import random
 random.seed(1) # make the simulation the same each time, easier to debug
 import pygame
@@ -16,6 +17,8 @@ def initialize_game():
     game.screen = pygame.display.set_mode(game.size)
     space = pymunk.Space()
     game, space, slingshot, bird = reset_game(game, space)
+    handler = space.add_default_collision_handler()
+    handler.begin = begin
 
     return game, space, running, slingshot, bird
 
@@ -52,3 +55,12 @@ def reset_game(game, space):
         space.add(block.body, block.shape)
 
     return game, space, slingshot, bird
+
+def begin(arbiter, space, data):
+    if (type(arbiter.shapes[0]) == pymunk.shapes.Circle or 
+        type(arbiter.shapes[1]) == pymunk.shapes.Circle):
+        print("bird collision")
+    #print("begin")
+    #print(arbiter.shapes)
+    #print(type(arbiter.shapes[0]), type(arbiter.shapes[1]))
+    return True 
