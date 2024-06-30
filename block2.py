@@ -11,12 +11,14 @@ class Block:
         self.moment = pymunk.moment_for_box(self.mass, self.size)
         self.body = pymunk.Body(self.mass, self.moment)
         self.shape = pymunk.Poly.create_box(self.body, self.size)
+        setattr(self.shape, 'id', 'block')
         self.body.angle = math.radians(angle_degrees)
         if not self.movable:
             self.body.body_type = pymunk.Body.STATIC
         self.body.position = self.position
         self.set_material_properties(self.shape)
         self.shape.collision_type = 1
+        self.removed = False
 
     def set_material_properties(self, shape):
         if self.material_type == 'wood':

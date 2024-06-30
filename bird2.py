@@ -13,6 +13,7 @@ class Bird:
         self.body = pymunk.Body(self.mass, self.inertia)
         self.body.position = pos
         self.shape = pymunk.Circle(self.body, self.radius, (0,0))
+        setattr(self.shape, 'id', 'bird')
         self.shape.elasticity = .8
         self.shape.friction = .8
         # Load the bird image

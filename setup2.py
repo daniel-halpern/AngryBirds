@@ -17,8 +17,6 @@ def initialize_game():
     game.screen = pygame.display.set_mode(game.size)
     space = pymunk.Space()
     game, space, slingshot, bird = reset_game(game, space)
-    handler = space.add_default_collision_handler()
-    handler.begin = begin
 
     return game, space, running, slingshot, bird
 
@@ -45,22 +43,19 @@ def reset_game(game, space):
     ground_shape = pymunk.Segment(ground_body, (0, game.floor), (game.size[0], game.floor), 0.0)
     ground_shape.elasticity = 0.8
     ground_shape.friction = 15
+    ground_shape.id = "ground"
+    setattr(ground_shape, 'id', 'ground')
     space.add(ground_body, ground_shape)
     space.damping = .6
 
-    #game.level_list
-    #game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
     # Block setup
     for block in game.level_list[game.level].block_list:
-        space.add(block.body, block.shape)
+        if block.removed != True:
+            space.add(block.body, block.shape)
+
+    # Detects collisions
+    handler = space.add_default_collision_handler()
+    handler.begin = begin
 
     return game, space, slingshot, bird
 
-def begin(arbiter, space, data):
-    if (type(arbiter.shapes[0]) == pymunk.shapes.Circle or 
-        type(arbiter.shapes[1]) == pymunk.shapes.Circle):
-        print("bird collision")
-    #print("begin")
-    #print(arbiter.shapes)
-    #print(type(arbiter.shapes[0]), type(arbiter.shapes[1]))
-    return True 
