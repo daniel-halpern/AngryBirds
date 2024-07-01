@@ -56,6 +56,6 @@ def reset_game(game, space):
     # Detects collisions
     handler = space.add_default_collision_handler()
     handler.begin = begin
-
+    
     return game, space, slingshot, bird
 

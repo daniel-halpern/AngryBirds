@@ -17,7 +17,8 @@ def main():
             game, space, slingshot, bird = reset_game(game, space)
             
         elif event_result == 'new bird':
-            game, space, slingshot, bird = reset_game(game, space)
+            g
+            ame, space, slingshot, bird = reset_game(game, space)
 
         # Handle mouse presses
         mouse_buttons_pressed = pygame.mouse.get_pressed()

@@ -33,15 +33,31 @@ def check_target_collision(game, bird, space):
             space.gravity = (0, 0)
 
 def begin(arbiter, space, data):
-    # Check if the collision is not with the ground
+    # Check if the collision is between the bird and a block
+    print(arbiter.total_impulse)
     if arbiter.shapes[0].id == "bird" and arbiter.shapes[1].id == "block":
         bird_shape = arbiter.shapes[0]
         block_shape = arbiter.shapes[1]
         total_velocity = math.sqrt(bird_shape.body.velocity[0] ** 2 + bird_shape.body.velocity[1] ** 2)
-        # May need to fine tune this / 4 number
-        if total_velocity / 4 > arbiter.shapes[1].body.mass:
+        # May need to fine tune this / 3 number
+        if total_velocity / 3 > arbiter.shapes[1].body.mass:
             space.remove(block_shape.body, block_shape)
-    elif arbiter.shapes[1].id == "bird" and arbiter.shapes[0].id == "block":
-        print("READD OTHER WAY AROUND")
-    # add if statement here to check if it is a block on block collision
+    elif arbiter.shapes[0].id == "block" and arbiter.shapes[1].id == "block":
+        total_impulse = math.sqrt(arbiter.total_impulse[0] ** 2 + arbiter.total_impulse[1] ** 2)
+        if abs(total_impulse) > 1000:
+            block_shape = arbiter.shapes[0]
+            block_shape2 = arbiter.shapes[1]
+            space.remove(block_shape.body, block_shape)
+            space.remove(block_shape2.body, block_shape2)
+    elif arbiter.shapes[1].id == "block" and arbiter.shapes[0].id == "ground":
+        print("ground")
+        total_impulse = math.sqrt(arbiter.total_impulse[0] ** 2 + arbiter.total_impulse[1] ** 2)
+        total_impulse = abs(arbiter.total_impulse[0]) + abs(arbiter.total_impulse[1])
+        if abs(total_impulse) > 1000:
+            if arbiter.shapes[0].id == "block": 
+                block_shape = arbiter.shapes[0]
+            else:
+                block_shape = arbiter.shapes[1]
+                print("destroyed")
+            space.remove(block_shape.body, block_shape)
     return True 
