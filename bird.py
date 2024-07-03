@@ -1,24 +1,28 @@
 import math
 import pygame
+import pymunk
+import pymunk.pygame_util
 
 class Bird:
-    def __init__(self, pos, mass):
-        self.pos = pos
+    def __init__(self, pos):
         self.in_slingshot = True
-        self.size = 25
-        self.velocity = [0, 0]
-        self.mass = mass
-        self.Fnetx = 0
-        self.Fnety = 0
-        self.accx = 0
-        self.accy = -.2
-        self.bird = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
+        self.mass = 10
+        self.radius = 25
+        # moment_for_circle args: mass, inner_radius, outer_radius, offset
+        self.inertia = pymunk.moment_for_circle(self.mass, 0, self.radius, (0,0))
+        self.body = pymunk.Body(self.mass, self.inertia)
+        self.body.position = pos
+        self.shape = pymunk.Circle(self.body, self.radius, (0,0))
+        setattr(self.shape, 'id', 'bird')
+        self.shape.elasticity = .8
+        self.shape.friction = .8
+        # Load the bird image
+        self.image = pygame.image.load('assets/Red.png')
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.shape.collision_type = 1
 
     def calculate_velocity(self, energy, theta):
         velocity = math.sqrt(2 * energy)
-        self.velocity[0] = -velocity * math.cos(theta)
-        self.velocity[1] = velocity * math.sin(theta)
-    
-    def recalculate_velocity(self, dt):
-        self.velocity[0] = self.velocity[0] + self.accx * dt
-        self.velocity[1] = self.velocity[1] + self.accy * dt
+        vx = -velocity * math.cos(theta)
+        vy = -velocity * math.sin(theta)
+        self.body.velocity = pymunk.Vec2d(vx, vy)
