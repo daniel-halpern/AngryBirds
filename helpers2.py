@@ -34,7 +34,6 @@ def check_target_collision(game, bird, space):
 
 def begin(arbiter, space, data):
     # Check if the collision is between the bird and a block
-    print(arbiter.total_impulse)
     if arbiter.shapes[0].id == "bird" and arbiter.shapes[1].id == "block":
         bird_shape = arbiter.shapes[0]
         block_shape = arbiter.shapes[1]
@@ -44,20 +43,17 @@ def begin(arbiter, space, data):
             space.remove(block_shape.body, block_shape)
     elif arbiter.shapes[0].id == "block" and arbiter.shapes[1].id == "block":
         total_impulse = math.sqrt(arbiter.total_impulse[0] ** 2 + arbiter.total_impulse[1] ** 2)
-        if abs(total_impulse) > 1000:
+        if abs(total_impulse) > 2000:
             block_shape = arbiter.shapes[0]
             block_shape2 = arbiter.shapes[1]
             space.remove(block_shape.body, block_shape)
             space.remove(block_shape2.body, block_shape2)
     elif arbiter.shapes[1].id == "block" and arbiter.shapes[0].id == "ground":
-        print("ground")
-        total_impulse = math.sqrt(arbiter.total_impulse[0] ** 2 + arbiter.total_impulse[1] ** 2)
-        total_impulse = abs(arbiter.total_impulse[0]) + abs(arbiter.total_impulse[1])
-        if abs(total_impulse) > 1000:
-            if arbiter.shapes[0].id == "block": 
-                block_shape = arbiter.shapes[0]
-            else:
-                block_shape = arbiter.shapes[1]
-                print("destroyed")
+        # May require fine tuning, however, I think this is a good enough algorithm
+        total_velocity = math.sqrt(arbiter.shapes[1].body.velocity[0] ** 2 + arbiter.shapes[1].body.velocity[1] ** 2)
+        if (abs(arbiter.shapes[1].body.angular_velocity) * total_velocity > 500
+            or arbiter.shapes[1].body.angular_velocity > 2 or total_velocity > 400
+            ):
+            block_shape = arbiter.shapes[1]
             space.remove(block_shape.body, block_shape)
     return True 

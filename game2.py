@@ -36,9 +36,20 @@ class Level():
                                Block((xpos + 486, 350), (10, 100), 100, 10, 'wood', False), # Rim
                                Block((xpos + 500, game.floor / 2 + 100), (20, game.floor - 200), 100, 0, 'wood', False)] # Backboard
         elif name == "testing": # Desperately need to make a way of doing this that is simpler
-            self.block_list = [Block((812, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
-                               Block((988, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
-                               Block((800 + (200 / 2), game.floor - (200) - 12), (200, 24), 100, 0, 'wood', True)]
+            self.block_list = [
+                            # Left bottom tower
+                            Block((812, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                            Block((988, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                            Block((800 + (200 / 2), game.floor - (200) - 12), (200, 24), 100, 0, 'wood', True),
+                            # Right bottom tower
+                            Block((812 + 200, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                            Block((988 + 200, game.floor - (200 / 2)), (24, 200), 100, 0, 'wood', True),
+                            Block((800 +200 + (200 / 2), game.floor - (200) - 12), (200, 24), 100, 0, 'wood', True),
+                            # Top tower
+                            Block((812 + 100, game.floor - (200 / 2) - 226), (24, 200), 100, 0, 'wood', True),
+                            Block((988 + 100, game.floor - (200 / 2) - 226), (24, 200), 100, 0, 'wood', True),
+                            Block((800 + 100 + (200 / 2), game.floor - (200) - 12 - 226), (200, 24), 100, 0, 'wood', True),
+                               ]
             
 class Slingshot:
     def __init__(self, pos):
