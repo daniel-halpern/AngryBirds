@@ -1,45 +1,72 @@
 import pygame
 import numpy as np
+import pygame
+import pymunk
+import pymunk.pygame_util
+import math
 
-def draw(screen, bird, slingshot, game):
+def draw(game, space, bird, slingshot):
     # Draw the background
     bg_image = pygame.image.load('assets/angryBirdsBackground.jpg')
     bg_image = pygame.transform.scale(bg_image, game.size)
-    screen.blit(bg_image, (0,0))
+    game.screen.blit(bg_image, (0,0))
 
     # Draw the slingshot bands
     if bird.in_slingshot:
         band1_pos = (slingshot.pos[0] - 15, slingshot.pos[1] - 15)
         band2_pos = (slingshot.pos[0] + 25, slingshot.pos[1] - 10)
-        pygame.draw.line(screen, "brown4", band1_pos, bird.pos, width = 20)
-        pygame.draw.line(screen, "brown4", band2_pos, bird.pos, width = 20)
-
-    # Draw the slingshot
+        pygame.draw.line(game.screen, "brown4", band1_pos, bird.body.position, width = 20)
+        pygame.draw.line(game.screen, "brown4", band2_pos, bird.body.position, width = 20)
+    # Draw the actual slingshot
     slingshot_image = pygame.image.load('assets/Slingshot_Classic.png')
     newPos = (slingshot.pos[0] - 25, slingshot.pos[1] - 50)
-    screen.blit(slingshot_image, newPos) 
+    game.screen.blit(slingshot_image, newPos) 
 
-    draw_blocks(screen, game)
     # If the level is "target", draw the target
     if game.level_list[game.level].name == "target":
         target_image = pygame.image.load('assets/target.png')
-        screen.blit(target_image, game.level_list[game.level].target_pos)
+        game.screen.blit(target_image, game.level_list[game.level].target_pos)
 
     # Draw the bird
-    bird_image = pygame.image.load('assets/Red.png')
-    bird_size = (50, 50)  # Replace with the desired size
-    bird_image = pygame.transform.scale(bird_image, bird_size)
-    bird_image_pos = (bird.pos[0] - bird_image.get_width() // 2, bird.pos[1] - bird_image.get_height() // 2)
-    screen.blit(bird_image, bird_image_pos)
-    #pygame.draw.circle(screen, "red", bird.pos, 25)
+    pos = pymunk.pygame_util.to_pygame(bird.body.position, game.screen)
+    angle_degrees = math.degrees(bird.body.angle)
+    rotated_image = pygame.transform.rotate(bird.image, -angle_degrees)  # Pygame rotates counterclockwise, pymunk uses clockwise rotation
+    new_pos = (pos[0] - rotated_image.get_width() / 2 - 3, pos[1] - rotated_image.get_height() / 2 - 3)
+    game.screen.blit(rotated_image, new_pos)
+
+    draw_blocks(game, space)
 
     pygame.display.flip()
 
-#pygame.draw.polygon(screen, "brown", block.point_list)
-
-def draw_blocks(screen, game):
+def draw_blocks(game, space):
     for block in game.level_list[game.level].block_list:
-        if block.type == "box":
-            pygame.draw.polygon(screen, "brown", block.point_list)
-        elif block.type == "line":
-            pygame.draw.polygon(screen, "brown", block.point_list)
+        if block.shape in space.shapes:
+            pos = pymunk.pygame_util.to_pygame(block.shape.body.position, game.screen)
+            angle_degrees = math.degrees(block.shape.body.angle)
+            # Just practice using a match-case statement
+            match block.material_type: 
+                case "ice":
+                    color = (173, 216, 230)  # Light blue
+                case "stone":
+                    color = (128, 128, 128)  # Gray
+                case "wood":
+                    color = (139, 69, 19)  # Brown
+                case _:
+                    color = (255, 255, 255)  # Default to white if material is unknown
+
+            width, height = block.size[0], block.size[1]
+            
+            # Create a surface to draw the rotated block
+            surface = pygame.Surface((width, height), pygame.SRCALPHA)
+            pygame.draw.rect(surface, color, surface.get_rect())
+            rotated_surface = pygame.transform.rotate(surface, -angle_degrees)
+            
+            # Calculate the new position after rotation
+            new_pos = (pos[0] - rotated_surface.get_width() / 2, pos[1] - rotated_surface.get_height() / 2)
+            game.screen.blit(rotated_surface, new_pos)
+            
+            # Quick debug view
+            #draw_options = pymunk.pygame_util.DrawOptions(game.screen)
+            #space.debug_draw(draw_options)
+        else:
+            block.removed = True

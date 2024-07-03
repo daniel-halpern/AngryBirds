@@ -1,33 +1,47 @@
 import pygame
 from setup import *
-from bird import *
-from game import *
-from events import *
 from draw import *
-import time
+from events import *
+from helpers import *
 
 def main():
     # Setup the game and the main game loop
-    screen, clock, running, slingshot, bird, game = initialize_game()
+    game, space, running, slingshot, bird = initialize_game()
     while running:
-        game.dt = clock.tick(60)
-
-        # Events
+        game.dt = game.clock.tick(60)
         event_result = handle_events(game)
         if event_result == False:
             running = False
         elif event_result == 'reset':
-            slingshot, bird = reset_game(game.level)
             game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
+            game, space, slingshot, bird = reset_game(game, space)
+            
         elif event_result == 'new bird':
-            slingshot, bird = reset_game(game.level)
+            game, space, slingshot, bird = reset_game(game, space)
 
-        handle_mouse_events(bird, slingshot, game)
-        check_bird_collisions(bird, game)
-        handle_block_movement(game, bird)
+        # Handle mouse presses
+        mouse_buttons_pressed = pygame.mouse.get_pressed()
+        # If the player is pulling back the slingshot
+        if mouse_buttons_pressed[0] and bird.in_slingshot:
+            mouse_pos = pygame.mouse.get_pos()
+            bird.body.position = mouse_pos
+            slingshot.stretch = calculate_bird_position(slingshot, bird, game)
+        elif bird.in_slingshot and abs(slingshot.stretch) > 0:
+            bird.in_slingshot = False
+            bird.calculate_velocity(slingshot.spring_potential_energy(), 
+                                    calculate_angle(slingshot.pos, bird.body.position))
+        
+        # Doesn't make much sense physics wise, however, this cancels out the gravitational
+        # force ensuring the bird does not move while in the slingshot
+        if bird.in_slingshot:
+            force = bird.body.mass * space.gravity
+            bird.body.apply_force_at_local_point(-force, (0, 0))
+
+        check_target_collision(game, bird, space)
 
         # Draws everything
-        draw(screen, bird, slingshot, game)
+        draw(game, space, bird, slingshot)
+        space.step(1/60.0)
     pygame.quit() 
 
 main()
