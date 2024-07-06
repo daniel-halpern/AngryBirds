@@ -1,4 +1,5 @@
 from block import *
+from characters import *
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -22,6 +23,7 @@ class Game():
         self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
         self.ticks_to_next_ball = 10
         self.lines = []
+        self.pig_list = [Pig((100, 100))]
 
 
 class Level():

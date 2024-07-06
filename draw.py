@@ -34,6 +34,15 @@ def draw(game, space, bird, slingshot):
     new_pos = (pos[0] - rotated_image.get_width() / 2 - 3, pos[1] - rotated_image.get_height() / 2 - 3)
     game.screen.blit(rotated_image, new_pos)
 
+    # Draw the pig
+    for pig in game.pig_list:
+        if pig.killed == False:
+            pos = pymunk.pygame_util.to_pygame(pig.body.position, game.screen)
+            angle_degrees = math.degrees(pig.body.angle)
+            rotated_image = pygame.transform.rotate(pig.image, -angle_degrees)  # Pygame rotates counterclockwise, pymunk uses clockwise rotation
+            new_pos = (pos[0] - rotated_image.get_width() / 2 - 3, pos[1] - rotated_image.get_height() / 2 - 3)
+            game.screen.blit(rotated_image, new_pos)
+
     draw_blocks(game, space)
 
     pygame.display.flip()

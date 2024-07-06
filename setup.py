@@ -1,5 +1,5 @@
 import pygame
-from bird import *
+from characters import *
 from game import *
 from helpers import *
 import random
@@ -37,6 +37,8 @@ def reset_game(game, space):
 
     bird = Bird(slingshot.pos)
     space.add(bird.body, bird.shape)
+    for pig in game.pig_list:
+        space.add(pig.body, pig.shape)
 
     # Ground setup
     ground_body = pymunk.Body(body_type=pymunk.Body.STATIC)

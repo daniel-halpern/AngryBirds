@@ -14,6 +14,7 @@ def main():
             running = False
         elif event_result == 'reset':
             game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
+            game.pig_list = [Pig((100, 100))]
             game, space, slingshot, bird = reset_game(game, space)
             
         elif event_result == 'new bird':
