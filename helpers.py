@@ -34,13 +34,15 @@ def check_target_collision(game, bird, space):
 
 def begin(arbiter, space, data):
     # Check if the collision is between the bird and a block
-    if arbiter.shapes[0].id == "bird" and arbiter.shapes[1].id == "block":
-        bird_shape = arbiter.shapes[0]
-        block_shape = arbiter.shapes[1]
-        total_velocity = math.sqrt(bird_shape.body.velocity[0] ** 2 + bird_shape.body.velocity[1] ** 2)
+    if (arbiter.shapes[0].id == "bird" or arbiter.shapes[0].id == "pig") and (arbiter.shapes[1].id == "block" or arbiter.shapes[1].id == "pig"):
+        first_shape = arbiter.shapes[0]
+        second_shape = arbiter.shapes[1]
+        total_velocity = math.sqrt(first_shape.body.velocity[0] ** 2 + second_shape.body.velocity[1] ** 2)
         # May need to fine tune this / 3 number
         if total_velocity / 3 > arbiter.shapes[1].body.mass:
-            space.remove(block_shape.body, block_shape)
+            space.remove(second_shape.body, second_shape)
+            if arbiter.shapes[0].id == "pig":
+                space.remove(first_shape.body, first_shape)
     elif arbiter.shapes[0].id == "block" and arbiter.shapes[1].id == "block":
         total_impulse = math.sqrt(arbiter.total_impulse[0] ** 2 + arbiter.total_impulse[1] ** 2)
         if abs(total_impulse) > 2000:

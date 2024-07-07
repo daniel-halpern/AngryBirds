@@ -38,6 +38,6 @@ class Pig:
         self.shape.elasticity = .8
         self.shape.friction = .8
         # Load the pig image (Change from bird to pig when I can get the image)
-        self.image = pygame.image.load('assets/Red.png')
+        self.image = pygame.image.load('assets/pig.png')
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.killed = False

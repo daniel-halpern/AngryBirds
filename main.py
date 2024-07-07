@@ -6,7 +6,8 @@ from helpers import *
 
 def main():
     # Setup the game and the main game loop
-    game, space, running, slingshot, bird = initialize_game()
+    pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40))]
+    game, space, running, slingshot, bird = initialize_game(pig_list)
     while running:
         game.dt = game.clock.tick(60)
         event_result = handle_events(game)
@@ -14,7 +15,10 @@ def main():
             running = False
         elif event_result == 'reset':
             game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
-            game.pig_list = [Pig((100, 100))]
+            game.pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), # Bottom layer
+                             Pig((1000, 625 - 40 - 200 - 150))] # Top layer
+            game.pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), # Bottom layer
+                             Pig((1000, 625 - 40 - 200 - 23))] # Top layer
             game, space, slingshot, bird = reset_game(game, space)
             
         elif event_result == 'new bird':
