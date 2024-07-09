@@ -20,6 +20,7 @@ def main():
             game.pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), # Bottom layer
                              Pig((1000, 625 - 40 - 200 - 23))] # Top layer
             game, space, slingshot, bird = reset_game(game, space)
+            game.screen_pos = -500
             
         elif event_result == 'new bird':
             game, space, slingshot, bird = reset_game(game, space)
@@ -43,6 +44,7 @@ def main():
             bird.body.apply_force_at_local_point(-force, (0, 0))
 
         check_target_collision(game, bird, space)
+        scroll(game, slingshot, bird)
 
         # Draws everything
         draw(game, space, bird, slingshot)

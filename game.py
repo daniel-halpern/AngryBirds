@@ -24,6 +24,7 @@ class Game():
         self.ticks_to_next_ball = 10
         self.lines = []
         self.pig_list = [Pig((100, 100))]
+        self.screen_pos = -500
 
 
 class Level():

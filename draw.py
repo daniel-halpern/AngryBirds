@@ -7,9 +7,10 @@ import math
 
 def draw(game, space, bird, slingshot):
     # Draw the background
-    bg_image = pygame.image.load('assets/angryBirdsBackground.jpg')
-    bg_image = pygame.transform.scale(bg_image, game.size)
-    game.screen.blit(bg_image, (0,0))
+    #bg_image = pygame.image.load('assets/angryBirdsBackground.jpg')
+    bg_image = pygame.image.load('assets/BackgroundTest.png')
+    bg_image = pygame.transform.scale(bg_image, [game.size[0] * 3, game.size[1]])
+    game.screen.blit(bg_image, (game.screen_pos, 0))
 
     # Draw the slingshot bands
     if bird.in_slingshot:

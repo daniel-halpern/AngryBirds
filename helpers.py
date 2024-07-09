@@ -32,6 +32,7 @@ def check_target_collision(game, bird, space):
             bird.body.velocity = (0, 0)
             space.gravity = (0, 0)
 
+# Deals with the collision destruction
 def begin(arbiter, space, data):
     # Check if the collision is between the bird and a block
     if (arbiter.shapes[0].id == "bird" or arbiter.shapes[0].id == "pig") and (arbiter.shapes[1].id == "block" or arbiter.shapes[1].id == "pig"):
@@ -50,12 +51,31 @@ def begin(arbiter, space, data):
             block_shape2 = arbiter.shapes[1]
             space.remove(block_shape.body, block_shape)
             space.remove(block_shape2.body, block_shape2)
-    elif arbiter.shapes[1].id == "block" and arbiter.shapes[0].id == "ground":
+    elif arbiter.shapes[0].id == "ground" and arbiter.shapes[1].id == "block":
         # May require fine tuning, however, I think this is a good enough algorithm
         total_velocity = math.sqrt(arbiter.shapes[1].body.velocity[0] ** 2 + arbiter.shapes[1].body.velocity[1] ** 2)
         if (abs(arbiter.shapes[1].body.angular_velocity) * total_velocity > 500
-            or arbiter.shapes[1].body.angular_velocity > 2 or total_velocity > 400
-            ):
+            or arbiter.shapes[1].body.angular_velocity > 2 or total_velocity > 400):
             block_shape = arbiter.shapes[1]
             space.remove(block_shape.body, block_shape)
+    elif arbiter.shapes[0].id == "pig" and arbiter.shapes[1].id == "ground":
+        # Similar algorithm to the block on ground collision, just different numbers
+        total_velocity = math.sqrt(arbiter.shapes[0].body.velocity[0] ** 2 + arbiter.shapes[0].body.velocity[1] ** 2)
+        if (abs(arbiter.shapes[0].body.angular_velocity) * total_velocity > 500
+            or arbiter.shapes[0].body.angular_velocity > 2 or total_velocity > 400):
+            pig_shape = arbiter.shapes[0]
+            space.remove(pig_shape.body, pig_shape)
     return True 
+
+def scroll(game, slingshot, bird):
+    if bird.body.position[0] > (game.size[0] / 2):
+        bird.passed_middle = True
+    if bird.passed_middle:
+        amount = bird.body.position[0] - (game.size[0] / 2)
+        for pig in game.pig_list:
+            pig.body.position = (pig.body.position[0] - amount, pig.body.position[1])
+        for block in game.level_list[game.level].block_list:
+            block.body.position = (block.body.position[0] - amount, block.body.position[1])
+        bird.body.position = (bird.body.position[0] - amount, bird.body.position[1])
+        slingshot.pos = (slingshot.pos[0] - amount, slingshot.pos[1])
+        game.screen_pos -= amount

@@ -19,5 +19,7 @@ def handle_events(game):
         return 'reset'
     if keys[pygame.K_e]:
         return 'new bird'
+    if keys[pygame.K_f]:
+        return 'scroll'
 
     return True

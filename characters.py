@@ -19,6 +19,7 @@ class Bird:
         # Load the bird image
         self.image = pygame.image.load('assets/Red.png')
         self.image = pygame.transform.scale(self.image, (50, 50))
+        self.passed_middle = False
 
     def calculate_velocity(self, energy, theta):
         velocity = math.sqrt(2 * energy)
