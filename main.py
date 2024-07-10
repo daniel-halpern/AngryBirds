@@ -24,6 +24,8 @@ def main():
             
         elif event_result == 'new bird':
             game, space, slingshot, bird = reset_game(game, space)
+            undo_scroll(game, slingshot, bird)
+            game.distance_scrolled = 0
 
         # Handle mouse presses
         mouse_buttons_pressed = pygame.mouse.get_pressed()

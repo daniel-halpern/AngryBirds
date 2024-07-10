@@ -44,7 +44,7 @@ def reset_game(game, space):
 
     # Ground setup
     ground_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-    ground_shape = pymunk.Segment(ground_body, (0, game.floor), (game.size[0], game.floor), 0.0)
+    ground_shape = pymunk.Segment(ground_body, (-game.size[0] * 3, game.floor), (game.size[0], game.floor), 0.0)
     ground_shape.elasticity = 0.8
     ground_shape.friction = 15
     ground_shape.id = "ground"

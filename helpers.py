@@ -72,6 +72,9 @@ def scroll(game, slingshot, bird):
         bird.passed_middle = True
     if bird.passed_middle:
         amount = bird.body.position[0] - (game.size[0] / 2)
+        if amount < 0:
+            return
+        game.distance_scrolled += amount
         for pig in game.pig_list:
             pig.body.position = (pig.body.position[0] - amount, pig.body.position[1])
         for block in game.level_list[game.level].block_list:
@@ -79,3 +82,14 @@ def scroll(game, slingshot, bird):
         bird.body.position = (bird.body.position[0] - amount, bird.body.position[1])
         slingshot.pos = (slingshot.pos[0] - amount, slingshot.pos[1])
         game.screen_pos -= amount
+        
+
+def undo_scroll(game, slingshot, bird):
+    for pig in game.pig_list:
+        pig.body.position = (pig.body.position[0] + game.distance_scrolled, pig.body.position[1])
+    for block in game.level_list[game.level].block_list:
+        block.body.position = (block.body.position[0] + game.distance_scrolled, block.body.position[1])
+    bird.body.position = (bird.body.position[0] + game.distance_scrolled, bird.body.position[1])
+    slingshot.pos = (slingshot.pos[0] + game.distance_scrolled, slingshot.pos[1])
+    game.screen_pos += game.distance_scrolled
+

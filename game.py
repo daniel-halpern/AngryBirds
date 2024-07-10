@@ -25,6 +25,9 @@ class Game():
         self.lines = []
         self.pig_list = [Pig((100, 100))]
         self.screen_pos = -500
+        bg_image = pygame.image.load('assets/BackgroundTest.png')
+        self.bg_image = pygame.transform.scale(bg_image, [self.size[0] * 3, self.size[1]])
+        self.distance_scrolled = 0
 
 
 class Level():
