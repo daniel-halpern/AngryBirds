@@ -82,7 +82,7 @@ def scroll(game, slingshot, bird):
         bird.body.position = (bird.body.position[0] - amount, bird.body.position[1])
         slingshot.pos = (slingshot.pos[0] - amount, slingshot.pos[1])
         game.screen_pos -= amount
-        
+
 
 def undo_scroll(game, slingshot, bird):
     for pig in game.pig_list:
