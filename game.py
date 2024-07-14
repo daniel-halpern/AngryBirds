@@ -28,6 +28,7 @@ class Game():
         bg_image = pygame.image.load('assets/BackgroundTest.png')
         self.bg_image = pygame.transform.scale(bg_image, [self.size[0] * 3, self.size[1]])
         self.distance_scrolled = 0
+        self.score = 0
 
 
 class Level():
@@ -66,7 +67,3 @@ class Slingshot:
 
     def spring_potential_energy(self):
         return .5 * self.spring_constant * (self.stretch ** 2) # PEs = 1/2kx^2
-
-class Player:
-    def __init__():
-        return

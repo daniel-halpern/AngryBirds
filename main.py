@@ -22,6 +22,7 @@ def main():
             game, space, slingshot, bird = reset_game(game, space)
             game.screen_pos = -500
             game.distance_scrolled = 0
+            game.score = 0
             
         elif event_result == 'new bird':
             game, space, slingshot, bird = reset_game(game, space)

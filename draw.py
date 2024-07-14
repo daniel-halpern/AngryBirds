@@ -42,9 +42,23 @@ def draw(game, space, bird, slingshot):
                 new_pos = (pos[0] - rotated_image.get_width() / 2 - 3, pos[1] - rotated_image.get_height() / 2 - 3)
                 game.screen.blit(rotated_image, new_pos)
         else:
+            if pig.killed == False:
+                game.score += 1000
             pig.killed = True
 
     draw_blocks(game, space)
+
+    # Create a font object. First argument is the font name, second is the size
+    font = pygame.font.SysFont(None, 36)
+
+    # Render the text. First argument is the text, second is anti-aliasing, third is the color
+    text_surface = font.render(f'Score: {game.score}', True, (255, 255, 255))  # White color
+
+    # Position the text on the screen, for example at the top left corner
+    text_pos = (10, 10)
+
+    # Blit the text onto the screen at the specified position
+    game.screen.blit(text_surface, text_pos)
 
     pygame.display.flip()
 
@@ -79,4 +93,6 @@ def draw_blocks(game, space):
             #draw_options = pymunk.pygame_util.DrawOptions(game.screen)
             #space.debug_draw(draw_options)
         else:
+            if block.removed == False:
+                game.score += 100
             block.removed = True
