@@ -93,3 +93,30 @@ def undo_scroll(game, slingshot, bird):
     slingshot.pos = (slingshot.pos[0] + game.distance_scrolled, slingshot.pos[1])
     game.screen_pos += game.distance_scrolled
 
+def set_bird_launch(game, bird, slingshot):
+    deltax = math.cos(math.radians(bird.pull_back_angle)) * bird.pull_back_distance
+    deltay = math.sin(math.radians(bird.pull_back_angle)) * bird.pull_back_distance
+    bird.body.position = (slingshot.pos[0] + deltax, slingshot.pos[1] - deltay)
+    if True: # May want to make a better way of toggling release
+        bird.in_slingshot = False
+        energy = .5 * slingshot.spring_constant * (bird.pull_back_distance ** 2)
+        velocity = math.sqrt(2 * energy)
+        vx = -velocity * math.cos(math.radians(bird.pull_back_angle))
+        vy = velocity * math.sin(math.radians(bird.pull_back_angle))
+        bird.body.velocity = (vx, vy)
+
+def check_for_no_movement(game, bird):
+    if bird.in_slingshot:
+        return False
+    for block in game.level_list[game.level].block_list:
+        print(block.body.velocity)
+        if (block.body.velocity[0] > 5 or block.body.velocity[1] > 5) and not block.removed:
+            return False
+    for pig in game.pig_list:
+        print(pig.body.velocity)
+        if (pig.body.velocity[0] > 5 or pig.body.velocity[1] > 5) and not pig.killed:
+            return False
+    print(bird.body.velocity)
+    if bird.body.velocity[0] > 5 or bird.body.velocity[1] > 5:
+        return False
+    return True

@@ -28,7 +28,10 @@ def main():
             game, space, slingshot, bird = reset_game(game, space)
             undo_scroll(game, slingshot, bird)
             game.distance_scrolled = 0
-
+        elif event_result == 'set bird launch':
+            if bird.in_slingshot:
+                set_bird_launch(game, bird, slingshot)
+                    
         # Handle mouse presses
         mouse_buttons_pressed = pygame.mouse.get_pressed()
         # If the player is pulling back the slingshot
@@ -49,6 +52,12 @@ def main():
 
         check_target_collision(game, bird, space)
         scroll(game, slingshot, bird)
+        #if check_for_no_movement(game, bird): # Returns true if there is no movement
+        #    game, space, slingshot, bird = reset_game(game, space)
+        #    undo_scroll(game, slingshot, bird)
+        #    game.distance_scrolled = 0
+        #    bird.in_slingshot = True
+
 
         # Draws everything
         draw(game, space, bird, slingshot)

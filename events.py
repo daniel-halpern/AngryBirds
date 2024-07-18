@@ -21,5 +21,7 @@ def handle_events(game):
         return 'new bird'
     if keys[pygame.K_f]:
         return 'scroll'
+    if keys[pygame.K_t]:
+        return 'set bird launch'
 
     return True

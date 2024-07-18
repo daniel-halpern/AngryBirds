@@ -21,6 +21,10 @@ class Bird:
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.passed_middle = False
 
+        # Bird preset launch settings
+        self.pull_back_distance = 50 # value from 0 - slingshot.max_stretch
+        self.pull_back_angle = 225 # Value from 0 - 360
+
     def calculate_velocity(self, energy, theta):
         velocity = math.sqrt(2 * energy)
         vx = -velocity * math.cos(theta)
