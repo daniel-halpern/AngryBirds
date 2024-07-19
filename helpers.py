@@ -24,6 +24,7 @@ def calculate_bird_position(slingshot, bird, game):
             stretch = slingshot.max_stretch
         return stretch
 
+# Checks if the bird is hitting the target
 def check_target_collision(game, bird, space):
     if game.level_list[game.level].name == "target":
         target_pos = game.level_list[game.level].target_pos
@@ -83,7 +84,6 @@ def scroll(game, slingshot, bird):
         slingshot.pos = (slingshot.pos[0] - amount, slingshot.pos[1])
         game.screen_pos -= amount
 
-
 def undo_scroll(game, slingshot, bird):
     for pig in game.pig_list:
         pig.body.position = (pig.body.position[0] + game.distance_scrolled, pig.body.position[1])
@@ -109,14 +109,12 @@ def check_for_no_movement(game, bird):
     if bird.in_slingshot:
         return False
     for block in game.level_list[game.level].block_list:
-        print(block.body.velocity)
-        if (block.body.velocity[0] > 5 or block.body.velocity[1] > 5) and not block.removed:
+        if (abs(block.body.velocity[0]) > 1 or abs(block.body.velocity[1]) > 1) and not block.removed:
             return False
     for pig in game.pig_list:
-        print(pig.body.velocity)
-        if (pig.body.velocity[0] > 5 or pig.body.velocity[1] > 5) and not pig.killed:
+        if (abs(pig.body.velocity[0]) > 1 or abs(pig.body.velocity[1]) > 1) and not pig.killed:
             return False
-    print(bird.body.velocity)
-    if bird.body.velocity[0] > 5 or bird.body.velocity[1] > 5:
+    # Play around with this value. It would be a good idea to raise it during training so it is quicker
+    if abs(bird.body.velocity[0]) > 3 or abs(bird.body.velocity[1]) > 3:
         return False
     return True

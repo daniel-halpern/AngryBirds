@@ -10,7 +10,7 @@ def main():
     game, space, running, slingshot, bird = initialize_game(pig_list)
     while running:
         game.dt = game.clock.tick(60)
-        event_result = handle_events(game)
+        event_result = handle_keyboard_events(game)
         if event_result == False:
             running = False
         elif event_result == 'reset':
@@ -32,35 +32,24 @@ def main():
             if bird.in_slingshot:
                 set_bird_launch(game, bird, slingshot)
                     
-        # Handle mouse presses
-        mouse_buttons_pressed = pygame.mouse.get_pressed()
-        # If the player is pulling back the slingshot
-        if mouse_buttons_pressed[0] and bird.in_slingshot:
-            mouse_pos = pygame.mouse.get_pos()
-            bird.body.position = mouse_pos
-            slingshot.stretch = calculate_bird_position(slingshot, bird, game)
-        elif bird.in_slingshot and abs(slingshot.stretch) > 0:
-            bird.in_slingshot = False
-            bird.calculate_velocity(slingshot.spring_potential_energy(), 
-                                    calculate_angle(slingshot.pos, bird.body.position))
-        
+        handle_mouse_events(game, bird, slingshot)
+        check_target_collision(game, bird, space)
+        scroll(game, slingshot, bird)
+        draw(game, space, bird, slingshot)
+
+        # Returns the bird to the slingshot if it is coming to a stop
+        if check_for_no_movement(game, bird): # Returns true if there is no movement
+            undo_scroll(game, slingshot, bird)
+            game, space, slingshot, bird = reset_game(game, space)
+            game.distance_scrolled = 0
+            bird.in_slingshot = True
+
         # Doesn't make much sense physics wise, however, this cancels out the gravitational
         # force ensuring the bird does not move while in the slingshot
         if bird.in_slingshot:
             force = bird.body.mass * space.gravity
             bird.body.apply_force_at_local_point(-force, (0, 0))
 
-        check_target_collision(game, bird, space)
-        scroll(game, slingshot, bird)
-        #if check_for_no_movement(game, bird): # Returns true if there is no movement
-        #    game, space, slingshot, bird = reset_game(game, space)
-        #    undo_scroll(game, slingshot, bird)
-        #    game.distance_scrolled = 0
-        #    bird.in_slingshot = True
-
-
-        # Draws everything
-        draw(game, space, bird, slingshot)
         space.step(1/60.0)
     pygame.quit() 
 
