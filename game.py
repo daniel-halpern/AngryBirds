@@ -23,7 +23,7 @@ class Game():
         self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
         self.ticks_to_next_ball = 10
         self.lines = []
-        self.pig_list = [Pig((100, 100))]
+        #self.pig_list = [Pig((100, 100))]
         self.screen_pos = -500
         bg_image = pygame.image.load('assets/BackgroundTest.png')
         self.bg_image = pygame.transform.scale(bg_image, [self.size[0] * 3, self.size[1]])
@@ -34,6 +34,7 @@ class Game():
 class Level():
     def __init__(self, game, name):
         self.name = name
+        self.pig_list = []
         if name == "target":
             self.block_list = []
             self.target_pos = (1000, 275)
@@ -57,6 +58,8 @@ class Level():
                             Block((988 + 100, game.floor - (200 / 2) - 226), (24, 200), 100, 0, 'wood', True),
                             Block((800 + 100 + (200 / 2), game.floor - (200) - 12 - 226), (200, 24), 100, 0, 'wood', True),
                                ]
+            self.pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), # Bottom layer
+                             Pig((1000, 625 - 40 - 200 - 23))] # Top layer
             
 class Slingshot:
     def __init__(self, pos):

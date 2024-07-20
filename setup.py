@@ -9,13 +9,12 @@ import pymunk
 import pymunk.pygame_util
 import math
 
-def initialize_game(pig_list):
+def initialize_game():
     # Pygame setup
     pygame.init()
     running = True
     game = Game(0)
     game.screen = pygame.display.set_mode(game.size)
-    game.pig_list = pig_list
     space = pymunk.Space()
     game, space, slingshot, bird = reset_game(game, space)
 
@@ -38,7 +37,7 @@ def reset_game(game, space):
 
     bird = Bird(slingshot.pos)
     space.add(bird.body, bird.shape)
-    for pig in game.pig_list:
+    for pig in game.level_list[game.level].pig_list:
         if not pig.killed:
             space.add(pig.body, pig.shape)
 

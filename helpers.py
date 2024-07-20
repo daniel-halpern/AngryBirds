@@ -76,7 +76,7 @@ def scroll(game, slingshot, bird):
         if amount < 0:
             return
         game.distance_scrolled += amount
-        for pig in game.pig_list:
+        for pig in game.level_list[game.level].pig_list:
             pig.body.position = (pig.body.position[0] - amount, pig.body.position[1])
         for block in game.level_list[game.level].block_list:
             block.body.position = (block.body.position[0] - amount, block.body.position[1])
@@ -85,7 +85,8 @@ def scroll(game, slingshot, bird):
         game.screen_pos -= amount
 
 def undo_scroll(game, slingshot, bird):
-    for pig in game.pig_list:
+    #for pig in game.pig_list:
+    for pig in game.level_list[game.level].pig_list:
         pig.body.position = (pig.body.position[0] + game.distance_scrolled, pig.body.position[1])
     for block in game.level_list[game.level].block_list:
         block.body.position = (block.body.position[0] + game.distance_scrolled, block.body.position[1])
@@ -111,7 +112,7 @@ def check_for_no_movement(game, bird):
     for block in game.level_list[game.level].block_list:
         if (abs(block.body.velocity[0]) > 1 or abs(block.body.velocity[1]) > 1) and not block.removed:
             return False
-    for pig in game.pig_list:
+    for pig in game.level_list[game.level].pig_list:
         if (abs(pig.body.velocity[0]) > 1 or abs(pig.body.velocity[1]) > 1) and not pig.killed:
             return False
     # Play around with this value. It would be a good idea to raise it during training so it is quicker

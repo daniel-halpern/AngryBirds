@@ -33,7 +33,7 @@ def draw(game, space, bird, slingshot):
     game.screen.blit(rotated_image, new_pos)
 
     # Draw the pig
-    for pig in game.pig_list:
+    for pig in game.level_list[game.level].pig_list:
         if pig.shape in space.shapes:
             if pig.killed == False:
                 pos = pymunk.pygame_util.to_pygame(pig.body.position, game.screen)

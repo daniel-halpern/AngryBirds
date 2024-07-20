@@ -6,8 +6,7 @@ from helpers import *
 
 def main():
     # Setup the game and the main game loop
-    pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), Pig((1000, 625 - 40 - 200 - 23))]
-    game, space, running, slingshot, bird = initialize_game(pig_list)
+    game, space, running, slingshot, bird = initialize_game()
     while running:
         game.dt = game.clock.tick(60)
         event_result = handle_keyboard_events(game)
@@ -16,9 +15,7 @@ def main():
         elif event_result == 'reset':
             game.level_list = Level(game, "testing"), Level(game, "target"), Level(game, "basketball")
             # May be able to streamline this process and not have to include two pig_lists if
-            # I made a way to reset each pig to their original location
-            game.pig_list = [Pig((900, 625 - 40)), Pig((1100, 625 - 40)), # Bottom layer
-                             Pig((1000, 625 - 40 - 200 - 23))] # Top layer
+            # I made a way to reset each pig to their original locations
             game, space, slingshot, bird = reset_game(game, space)
             game.screen_pos = -500
             game.distance_scrolled = 0
