@@ -35,7 +35,7 @@ def main():
         draw(game, space, bird, slingshot)
 
         # Returns the bird to the slingshot if it is coming to a stop
-        if check_for_no_movement(game, bird): # Returns true if there is no movement
+        if check_for_no_movement(game, bird) and not game.level_list[game.level].name == "target": # Returns true if there is no movement
             undo_scroll(game, slingshot, bird)
             game, space, slingshot, bird = reset_game(game, space)
             game.distance_scrolled = 0

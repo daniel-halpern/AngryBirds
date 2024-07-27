@@ -83,6 +83,9 @@ def scroll(game, slingshot, bird):
         bird.body.position = (bird.body.position[0] - amount, bird.body.position[1])
         slingshot.pos = (slingshot.pos[0] - amount, slingshot.pos[1])
         game.screen_pos -= amount
+        if game.level_list[game.level].name == "target":
+            game.level_list[game.level].target_pos = (game.level_list[game.level].target_pos[0] - amount, 
+                                                      game.level_list[game.level].target_pos[1])
 
 def undo_scroll(game, slingshot, bird):
     #for pig in game.pig_list:
@@ -93,6 +96,10 @@ def undo_scroll(game, slingshot, bird):
     bird.body.position = (bird.body.position[0] + game.distance_scrolled, bird.body.position[1])
     slingshot.pos = (slingshot.pos[0] + game.distance_scrolled, slingshot.pos[1])
     game.screen_pos += game.distance_scrolled
+    if game.level_list[game.level].name == "target":
+        game.level_list[game.level].target_pos = (game.level_list[game.level].target_pos[0] + game.distance_scrolled, 
+                                                  game.level_list[game.level].target_pos[1])
+
 
 def set_bird_launch(game, bird, slingshot):
     deltax = math.cos(math.radians(bird.pull_back_angle)) * bird.pull_back_distance

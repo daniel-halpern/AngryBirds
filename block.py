@@ -14,7 +14,9 @@ class Block:
         setattr(self.shape, 'id', 'block')
         self.body.angle = math.radians(angle_degrees)
         if not self.movable:
-            self.body.body_type = pymunk.Body.STATIC
+            self.body.body_type = pymunk.Body.KINEMATIC  # Changed from STATIC to KINEMATIC
+        else:
+            self.body.body_type = pymunk.Body.DYNAMIC  # Ensure movable blocks are dynamic
         self.body.position = self.position
         self.set_material_properties(self.shape)
         self.shape.collision_type = 1
